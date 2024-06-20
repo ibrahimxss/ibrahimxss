@@ -73,5 +73,68 @@ Rapid Deployment: Swift and efficient deployment with minimal setup requirements
 
 
 
+Using the #IBRAHIMXSS Tool
+Getting started with the #IBRAHIMXSS Tool is straightforward. You can use command-line arguments to tailor your tests to your specific needs. Here are some examples:
+
+To perform GET requests with custom payloads:
+
+./xss-checker — get — urls urls.txt — payloads payloads.txt
+
+
+
+2. To perform POST requests with custom headers and JSON payloads:
+
+
+./xss-checker — post — request request.txt — payloads payloads.txt — json
+
+
+
+3. To customize thread count and timeout values:
+
+
+./xss-checker — get — urls urls.txt — payloads payloads.txt — threads 20 — timeout 8000
+
+
+
+4. To inject payloads into URL paths with prefixes and suffixes:
+
+
+./xss-checker — get — urls urls.txt — payloads payloads.txt — path — prefix 123 — suffix .html
+
+
+
+5. And much much more options from the Tool…
+
+
+
+Unmatched Accuracy and Recent Achievements
+One of the standout features of the #IBRAHIMXSS Tool is its unparalleled accuracy. I take pride in the fact that my tool delivers a 100% success rate without generating false positives. It’s a testament to the dedication and expertise of my pentest team.
+
+
+
+REPORTS SAMPLES :
+
+
+##################Get Request:
+
+Url Tested: http://testphp.vulnweb.com/listproducts.php?artist=1
+
+
+![1](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/afcef8a5-dd60-492c-a3e8-0fa28a7aafeb)
+
+
+![2](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/05f2c173-08e0-4191-86a6-f046e1639da6)
+
+
+![3](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/3d97ea0e-94ac-43dc-95b6-fb60e87e96bd)
+
+
+
+![4](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/cd4048dc-b4b6-4919-b146-c249c668e82e)
+
+
+
+
+
 
 
