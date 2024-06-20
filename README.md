@@ -27,3 +27,51 @@ Path-Based XSS: Injecting payloads into the path of URLs is a common attack vect
 
 JSON-Based XSS: JSON payloads are supported for POST requests, allowing for a deeper level of testing.
 
+Multi-threading: The tool supports multi-threading, enabling simultaneous testing of multiple URLs to save time.
+
+Intelligent URL Shuffling: When dealing with multiple URLs, the tool intelligently shuffles them to avoid detection and distribute requests evenly.
+
+Resume Interrupted Scans: In case a scan is interrupted, you can resume from where you left off, ensuring thorough testing without duplication.
+
+Customizable Delay: A delay can be set between requests to mimic human behavior and avoid triggering rate limits or detection mechanisms.
+
+Timeout Management: Set maximum timeout values to ensure efficient testing without waiting indefinitely.
+
+Zero False Positives: Trust in its accuracy and save valuable time by focusing only on real vulnerabilities.
+
+Unique Innovation: Harness the power of advanced algorithms and techniques not found in other tools.
+
+Flexible Detection Modes: Adapt to any scenario with customizable options for quick scans or deep analysis.
+
+WAF Bypass: Evade Web Application Firewalls to ensure a true assessment of your web security.
+
+Stealth Mode: Conduct scans discreetly without alerting potential intruders.
+
+Over 2500 Encoded Payloads: Test a wide range of XSS attack vectors with a comprehensive library of payloads.
+
+Customizable Payloads: Create and use tailored payloads for specific needs and scenarios.
+
+Exportable Reports: Share detailed, professional reports with stakeholders, demonstrating the thoroughness and effectiveness of your security efforts.
+
+XSS into all kinds of extensions: Expand your security coverage with support for various URL extensions.
+
+Support for Various Web Technologies: Ensure comprehensive security across different platforms.
+
+Continuous Updates: Stay ahead of evolving threats with regular updates to the tool.
+
+High Performance: Optimized for speed and efficiency, delivering rapid and accurate results.
+
+Automated Scanning: Schedule regular scans and maintain continuous security monitoring with minimal manual intervention.
+
+Accurate Detection Algorithms: Minimize false positives with precise and reliable vulnerability detection.
+
+Easy Configuration: User-friendly settings and intuitive controls for quick setup and scanning.
+
+Advanced Search and Filter Options: Quickly locate specific vulnerabilities and focus on the most critical issues.
+
+Rapid Deployment: Swift and efficient deployment with minimal setup requirements.
+
+
+
+
+
