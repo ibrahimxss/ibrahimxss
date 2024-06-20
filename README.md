@@ -115,7 +115,7 @@ One of the standout features of the #IBRAHIMXSS Tool is its unparalleled accurac
 REPORTS SAMPLES :
 
 
-##################Get Request:
+################## Get Request: ################
 
 Url Tested: http://testphp.vulnweb.com/listproducts.php?artist=1
 
@@ -126,12 +126,28 @@ Url Tested: http://testphp.vulnweb.com/listproducts.php?artist=1
 ![2](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/05f2c173-08e0-4191-86a6-f046e1639da6)
 
 
-![3](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/3d97ea0e-94ac-43dc-95b6-fb60e87e96bd)
+
+FIle with report sample for GET req: https://www.sendspace.com/file/odau5q
 
 
 
-![4](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/cd4048dc-b4b6-4919-b146-c249c668e82e)
+################## POST Request: ################
 
+
+POST Request:
+
+
+Url Tested: http://testphp.vulnweb.com/guestbook.php
+
+
+![4](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/2adbcd84-16dc-43a0-8e3e-fb7e0362c526)
+
+
+
+![6](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/374c0769-f827-4e28-880f-4db215bffc7d)
+
+
+![7](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/590464e2-9493-4d7f-8a54-4de7e2cbfc47)
 
 
 
