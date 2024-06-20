@@ -151,6 +151,26 @@ Url Tested: http://testphp.vulnweb.com/guestbook.php
 
 
 
+Report sample for POST req: https://www.sendspace.com/file/pv8n4g
 
+
+
+
+################## PATH Request: ################
+
+
+
+Url Tested: https://brutelogic.com.br/xss.php/
+
+
+![7](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/8504f7d7-b21d-49c7-b60a-4b7c8fb8de1f)
+
+
+
+![8](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/409ba7ac-6ca4-4ac8-b2b6-8619da19c61c)
+
+
+
+![9](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/8cd047f5-9cb2-41b2-b895-22e0b599c5ed)
 
 
