@@ -156,14 +156,13 @@ Report sample for POST req: https://www.sendspace.com/file/pv8n4g
 
 
 
+
 ################## PATH Request: ################
 
 
 
 Url Tested: https://brutelogic.com.br/xss.php/
 
-
-![7](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/8504f7d7-b21d-49c7-b60a-4b7c8fb8de1f)
 
 
 
@@ -172,5 +171,10 @@ Url Tested: https://brutelogic.com.br/xss.php/
 
 
 ![9](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/8cd047f5-9cb2-41b2-b895-22e0b599c5ed)
+
+
+![10](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/28dd348c-bfec-42ce-9f45-c4a7f39e0b77)
+
+
 
 
