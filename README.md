@@ -177,4 +177,26 @@ Url Tested: https://brutelogic.com.br/xss.php/
 
 
 
+Report sample for PATH req: https://www.sendspace.com/file/tx5s8l
+
+
+
+
+################## DOM Request: ################
+
+
+
+Url Tested: https://public-firing-range.appspot.com/address/location.hash/assign#
+
+
+
+![11](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/b70e8b88-8ec5-40ee-9e47-aa9fe381e53f)
+
+
+
+
+![12](https://github.com/ibrahimxss/ibrahimxss/assets/173381793/c0e45310-657e-46d4-b857-26a4d46ecc0c)
+
+
+
 
